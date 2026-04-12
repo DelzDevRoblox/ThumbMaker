@@ -1,0 +1,19 @@
+{
+  "name": "ThumbMaker",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Plugins": {
+        "$className": "Folder",
+          "ThumbMaker": {
+          "$path": "src/ThumbMaker"
+        }
+      }
+    }
+  },
+  "globIgnorePaths": [
+    "*.lock",
+    "*.toml"
+  ]
+}
