@@ -10,17 +10,21 @@
 
 ]]
 
-local SelectionService = game:GetService("Selection")
 local CoreGui = game:GetService("CoreGui")
+local SelectionService = game:GetService("Selection")
 local UserInputService = game:GetService("UserInputService")
 
 local Types = require(script.Types)
 local Utils = require(script.Utils)
 
-local ICON_DEFAULT = "rbxassetid://14034112968"
-local ICON_DEFAULT_DE = "rbxassetid://107083275815819"
-local ICON_AI_1 = "rbxassetid://108403669183553"
-local ICON_AI_2 = "rbxassetid://83975823770967"
+local ICON_DEFAULT       = "rbxassetid://14034112968"
+local ICON_DEFAULT_DON_E = "rbxassetid://107083275815819"
+local ICON_AI_1          = "rbxassetid://108403669183553"
+local ICON_AI_2          = "rbxassetid://83975823770967"
+
+local FOV_DEFAULT        = 70
+local FOV_ORTHO          = 5
+
 local ATTR_FLAG          = "ThumbMakerSave"
 local ATTR_SVVERSION     = "SaveFormat"
 local ATTR_IS_ORTHO      = "CamIsOrthoMode"
@@ -40,12 +44,10 @@ local ATTR_LOOK_Z        = "CamLookZ"
 
 local toolbar = plugin:CreateToolbar("ThumbMaker")
 
-local isDonatorEdition = script:FindFirstChild("IsDonatorEdition") and script:FindFirstChild("IsDonatorEdition").Value == true
-
 local openCloseButton = toolbar:CreateButton(
   "ThumbMaker",
   "Make thumbnails for your UGC and models!",
-  isDonatorEdition == true and ICON_DEFAULT_DE or ICON_DEFAULT
+  ICON_DEFAULT
 )
 openCloseButton.ClickableWhenViewportHidden = true
 
@@ -79,23 +81,23 @@ function ThumbMakerPlugin.new(gui: ScreenGui): ThumbMakerPluginType
   instance._nudgeStep = 0.5 :: number -- studs per nudge
 
   local frame: Frame = gui:FindFirstChild("Frame") :: Frame
-  
+
   local Get = function(...) return Utils:GetFromPath(...) end
 
   instance._gui = {
     ScreenGui = gui :: ScreenGui,
     Frame = frame :: Frame,
     Props = {
-      StartingFOV = (Utils:GetCamera().FieldOfView or 70),
+      StartingFOV = (Utils:GetCamera().FieldOfView or FOV_DEFAULT),
       OriginalDeleteButtonColor = Color3.fromRGB(0, 0, 0),
       OriginalResetCameraOffsetButtonColor = Color3.fromRGB(0, 0, 0),
       FOVHandleDragging = false,
       IsOrthoMode = false,
       OrthoDistance = 20, -- Stores the camera distance used for ortho so switching back is seamless
-      PerspectiveFOV = 70,
+      PerspectiveFOV = FOV_DEFAULT,
       WarningRevertThread = nil,
     },
-    
+
     Credits = {
       Version = Get(Get(frame, "Credits"), "Version") :: TextLabel,
     },
@@ -156,7 +158,7 @@ end
 
 function ThumbMakerPlugin:_initGui()
   local self: ThumbMakerPluginType = self
-  
+
   local camera = Utils:GetCamera()
   script.Parent:FindFirstChild("Grid"):Clone().Parent = self._gui.Viewports.MainViewport
 
@@ -221,13 +223,15 @@ function ThumbMakerPlugin:_initGui()
   end)
 
   -- Nudge camera with arrow keys / WASD when plugin is open
-  self._nudgeConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if not self._gui.ScreenGui.Enabled then return end
-    if not self._selected.instance then return end
-    self:_handleNudgeInput(input)
-  end)
-  
+  --self._nudgeConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+  --  if gameProcessed then return end
+  --  if not self._gui.ScreenGui.Enabled then return end
+  --  if not self._selected.instance then return end
+  --  self:_handleNudgeInput(input)
+  --end)
+
+  self:_initScaledPan()
+
   camera:GetPropertyChangedSignal("CFrame"):Connect(function()
     if not self._gui.ScreenGui.Enabled then return end
     if not self._selected.instance then return end
@@ -250,14 +254,12 @@ function ThumbMakerPlugin:_initGui()
     self._gui.ChangelogButton.InfoBox.Visible = false
   end)
 
-  if not isDonatorEdition then
-    self._gui.FavoriteStarButton.Button.MouseButton1Click:Connect(function ()
-      self._gui.FavoriteStarButton.InfoBox.Visible = not self._gui.FavoriteStarButton.InfoBox.Visible
-    end)
-    self._gui.FavoriteStarButton.CloseButton.MouseButton1Click:Connect(function ()
-      self._gui.FavoriteStarButton.InfoBox.Visible = false
-    end)
-  end
+  self._gui.FavoriteStarButton.Button.MouseButton1Click:Connect(function ()
+    self._gui.FavoriteStarButton.InfoBox.Visible = not self._gui.FavoriteStarButton.InfoBox.Visible
+  end)
+  self._gui.FavoriteStarButton.CloseButton.MouseButton1Click:Connect(function ()
+    self._gui.FavoriteStarButton.InfoBox.Visible = false
+  end)
 end
 
 -- ─────────────────────────────────────────────────────────────
@@ -274,7 +276,7 @@ function ThumbMakerPlugin:_togglePerspective()
 
   if not self._selected.instance then
     if isCurrentlyOrtho then
-      self:_forcePerspective(self._gui.Props.PerspectiveFOV or 70)
+      self:_forcePerspective(self._gui.Props.PerspectiveFOV or FOV_DEFAULT)
     end
     return
   end
@@ -282,7 +284,7 @@ function ThumbMakerPlugin:_togglePerspective()
   if isCurrentlyOrtho then
     local pivot: CFrame = self:_findPivot(self._selected.instance)
     local currentDir: Vector3 = (camera.CFrame.Position - pivot.Position).Unit
-    local targetFOV: number = self._gui.Props.PerspectiveFOV or 70
+    local targetFOV: number = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
 
     self:_moveCameraTo(CFrame.new(pivot.Position + currentDir * self._gui.Props.OrthoDistance, pivot.Position))
     camera.FieldOfView = targetFOV
@@ -299,7 +301,7 @@ function ThumbMakerPlugin:_togglePerspective()
     self._gui.Props.PerspectiveFOV = camera.FieldOfView
 
     local oldFOV: number = camera.FieldOfView
-    local newFOV: number = 5
+    local newFOV: number = FOV_ORTHO
     local ratio: number = math.tan(math.rad(oldFOV / 2)) / math.tan(math.rad(newFOV / 2))
     local newDist: number = currentDist * ratio
 
@@ -317,16 +319,16 @@ end
 function ThumbMakerPlugin:_forceOrtho(fov: number?)
   local camera = Utils:GetCamera()
   self._gui.Props.IsOrthoMode        = true
-  camera.FieldOfView                 = fov or 5
+  camera.FieldOfView                 = fov or FOV_ORTHO
   self._gui.Labels.CameraMode.Text   = "📸 ORTHOGRAPHIC"
-  self:_FOVSliderSetPosition(fov or 5)
+  self:_FOVSliderSetPosition(fov or FOV_ORTHO)
   self:_onCameraModeChanges()
 end
 
 -- forces the camera mode to be perspective
 function ThumbMakerPlugin:_forcePerspective(fov: number?)
   local camera = Utils:GetCamera()
-  local resolvedFOV = fov or 70
+  local resolvedFOV = fov or FOV_DEFAULT
   self._gui.Props.IsOrthoMode        = false
   self._gui.Props.PerspectiveFOV     = resolvedFOV  -- keep it in sync
   camera.FieldOfView                 = resolvedFOV
@@ -397,7 +399,7 @@ function ThumbMakerPlugin:_autoFrameModel()
     -- so that toggling back to perspective lands at the right apparent size.
     -- perspDist * tan(perspFOV/2) = orthoDist * tan(orthoFOV/2)
     local orthoFOV: number = fov
-    local perspFOV: number = self._gui.Props.PerspectiveFOV or 70
+    local perspFOV: number = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
     local ratio: number = math.tan(math.rad(orthoFOV / 2)) / math.tan(math.rad(perspFOV / 2))
     self._gui.Props.OrthoDistance = distance * ratio
   else
@@ -412,45 +414,94 @@ end
 -- Q/E move up/down.  Shift halves the step for micro-adjustments.
 -- By @Jademaus.
 -- ─────────────────────────────────────────────────────────────
-function ThumbMakerPlugin:_handleNudgeInput(input: InputObject)
-  local self: ThumbMakerPluginType = self
-  if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+--function ThumbMakerPlugin:_handleNudgeInput(input: InputObject)
+--  local self: ThumbMakerPluginType = self
+--  if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
 
-  local camera = Utils:GetCamera()
-  local step: number = self._nudgeStep
-  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
-    step = step * 0.2  -- fine mode
-  end
+--  local camera = Utils:GetCamera()
+--  local step: number = self._nudgeStep
+--  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
+--    step = step * 0.2  -- fine mode
+--  end
 
-  local cf: CFrame = camera.CFrame
-  -- Local axes of the camera
-  local right: Vector3 = cf.RightVector
-  local up: Vector3 = cf.UpVector
-  -- Flat forward (ignore tilt) so W/S don't just dive into the ground
-  local forward: Vector3 = Vector3.new(cf.LookVector.X, 0, cf.LookVector.Z)
-  if forward.Magnitude < 0.001 then forward = cf.LookVector end
-  forward = forward.Unit
+--  local cf: CFrame = camera.CFrame
+--  -- Local axes of the camera
+--  local right: Vector3 = cf.RightVector
+--  local up: Vector3 = cf.UpVector
+--  -- Flat forward (ignore tilt) so W/S don't just dive into the ground
+--  local forward: Vector3 = Vector3.new(cf.LookVector.X, 0, cf.LookVector.Z)
+--  if forward.Magnitude < 0.001 then forward = cf.LookVector end
+--  forward = forward.Unit
 
-  local delta: Vector3 = Vector3.zero
+--  local delta: Vector3 = Vector3.zero
 
-  if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
-    delta = forward * step
-  elseif input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.Down then
-    delta = -forward * step
-  elseif input.KeyCode == Enum.KeyCode.A or input.KeyCode == Enum.KeyCode.Left then
-    delta = -right * step
-  elseif input.KeyCode == Enum.KeyCode.D or input.KeyCode == Enum.KeyCode.Right then
-    delta = right * step
-  elseif input.KeyCode == Enum.KeyCode.E then
-    delta = up * step
-  elseif input.KeyCode == Enum.KeyCode.Q then
-    delta = -up * step
-  else
-    return  -- not a nudge key, do nothing
-  end
+--  if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
+--    delta = forward * step
+--  elseif input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.Down then
+--    delta = -forward * step
+--  elseif input.KeyCode == Enum.KeyCode.A or input.KeyCode == Enum.KeyCode.Left then
+--    delta = -right * step
+--  elseif input.KeyCode == Enum.KeyCode.D or input.KeyCode == Enum.KeyCode.Right then
+--    delta = right * step
+--  elseif input.KeyCode == Enum.KeyCode.E then
+--    delta = up * step
+--  elseif input.KeyCode == Enum.KeyCode.Q then
+--    delta = -up * step
+--  else
+--    return  -- not a nudge key, do nothing
+--  end
 
-  -- Apply nudge
-  self:_moveCameraTo(cf + delta)
+--  -- Apply nudge
+--  self:_moveCameraTo(cf + delta)
+--end
+
+-- ─────────────────────────────────────────────────────────────
+-- NEW: Slower camera with mouse for fine positioning.
+-- By @Jademaus.
+-- ─────────────────────────────────────────────────────────────
+function ThumbMakerPlugin:_initScaledPan()
+  local REFERENCE_FOV  = FOV_DEFAULT
+  local rmbHeld        = false
+
+  UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.MouseButton2 then return end
+    if not self._gui.ScreenGui.Enabled then return end
+    if not self._selected.instance then return end
+    local camera = Utils:GetCamera()
+    if camera.FieldOfView >= 30 then return end
+
+    rmbHeld = true
+    camera.CameraType = Enum.CameraType.Scriptable
+  end)
+
+  UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.MouseButton2 then return end
+    if not rmbHeld then return end
+
+    rmbHeld = false
+    local camera = Utils:GetCamera()
+    camera.CameraType = Enum.CameraType.Fixed
+  end)
+
+  UserInputService.InputChanged:Connect(function(input)
+    if not rmbHeld then return end
+    if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+
+    local camera = Utils:GetCamera()
+    local fov   = camera.FieldOfView
+    local scale = fov / REFERENCE_FOV
+    local delta = input.Delta * 0.5
+    local shiftHeld = UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)
+
+    if shiftHeld then
+      delta = delta * 0.2
+    end
+
+    local cf = camera.CFrame
+    camera.CFrame = cf
+      * CFrame.Angles(0, -math.rad(delta.X) * scale, 0)
+      * CFrame.Angles(-math.rad(delta.Y) * scale, 0, 0)
+  end)
 end
 
 function ThumbMakerPlugin:_guiOpen()
@@ -458,7 +509,7 @@ function ThumbMakerPlugin:_guiOpen()
   self:_forcePerspective()
   self._gui.ScreenGui.Parent = CoreGui
   self._gui.ScreenGui.Enabled = true
-  self._gui.Props.StartingFOV = camera.FieldOfView or 70
+  self._gui.Props.StartingFOV = camera.FieldOfView or FOV_DEFAULT
   self._gui.Props.IsOrthoMode = false
   if self:_getSelectedModel() then -- when opening the gui, if you have something selected it selects that
     self:_onSelectionChanges()
@@ -824,7 +875,7 @@ function ThumbMakerPlugin:_saveCameraState(target: Camera | Configuration)
   local CURRENT_SAVE_VERSION = 1  -- update this when changes to the saver happen
   local camera = Utils:GetCamera()
   local isOrtho = self._gui.Props.IsOrthoMode
-  local perspFOV = self._gui.Props.PerspectiveFOV or 70
+  local perspFOV = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
   local instance: Instance? = self._selected.instance
   if not instance then return end
   local pivot: CFrame = self:_findPivot(instance)
@@ -893,7 +944,7 @@ function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
     if savedOrthoDist then
       self._gui.Props.OrthoDistance = savedOrthoDist
     end
-    self._gui.Props.PerspectiveFOV = target:GetAttribute(ATTR_PERSP_FOV) or 70
+    self._gui.Props.PerspectiveFOV = target:GetAttribute(ATTR_PERSP_FOV) or FOV_DEFAULT
     self:_forceOrtho(target:GetAttribute(ATTR_FOV))
   else
     local savedFOV = target:GetAttribute(ATTR_FOV)
@@ -915,8 +966,9 @@ function ThumbMakerPlugin:Destroy()
   self._gui.ScreenGui:Destroy()
 end
 
-local pluginGui = script.Parent:FindFirstChild(not isDonatorEdition and "ThumbMaker-Gui" or "ThumbMakerDonator-Gui") :: ScreenGui
+local pluginGui = script.Parent:FindFirstChild("ThumbMaker-Gui") :: ScreenGui
 local myPlugin = ThumbMakerPlugin.new(pluginGui)
-plugin.Unloading:Connect(
-  function() myPlugin:Destroy()
+
+plugin.Unloading:Connect(function ()
+  myPlugin:Destroy()
 end)

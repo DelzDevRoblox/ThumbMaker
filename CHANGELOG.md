@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2026-04-14
+## [1.1.0] - 2026-04-18
 
 ### Added
 
-- Button to change camera mode from Perspective to Orthographic, by @Jademaus.
-- Nudge camera with keyboard for fine positioning of the Camera, by @Jademaus.
-- When switching from Normal to Orthographic view the Thumbnails stays roughly the same, by @Jademaus.
+- Button to change camera mode from Perspective to Orthographic, by <b>@Jademaus</b>.
+- Smoothing the Camera for fine positioning when using Orthographic view, by <b>@Jademaus</b>.
+- When switching from Normal to Orthographic view the Thumbnails stays roughly the same, by <b>@Jademaus</b>.
 
 ### Changed
 

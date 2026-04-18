@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="ScreenGui" referent="RBX0291BEB0DD304F3CA6F86A446797B073">
+	<Item class="ScreenGui" referent="RBX9C955D10C37B42C88EE1A75F4640C48E">
 		<Properties>
 			<bool name="ClipToDeviceSafeArea">true</bool>
 			<int name="DisplayOrder">0</int>
@@ -10,6 +10,7 @@
 			<token name="ScreenInsets">2</token>
 			<bool name="Enabled">false</bool>
 			<bool name="ResetOnSpawn">true</bool>
+			<bool name="TabKeyboardNavigation">false</bool>
 			<token name="ZIndexBehavior">1</token>
 			<bool name="AutoLocalize">true</bool>
 			<Ref name="RootLocalizationTable">null</Ref>
@@ -25,7 +26,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Frame" referent="RBX158C94484BE44574907A5C4A379E0BE9">
+		<Item class="Frame" referent="RBX9F309D19232C48FCA5AF22FD0D48D5A8">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -89,7 +90,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="Frame" referent="RBXB5FA8A4B1D994E718C755FEB86AC60EE">
+			<Item class="Frame" referent="RBX75A36D9E316F479DA1AAEF5688F9962A">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -153,7 +154,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ViewportFrame" referent="RBX9CE351AA337440438EC993065AC1C734">
+				<Item class="ViewportFrame" referent="RBX69C13E59DEE847FCA38DE6FDD97F7464">
 					<Properties>
 						<Color3 name="Ambient">
 							<R>0.784313738</R>
@@ -252,7 +253,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX20C0D0C610574C57ADFA4391E47D00D7">
+					<Item class="UICorner" referent="RBX2A07BB219A684D97B816B72803986963">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.0299999993</S>
@@ -267,7 +268,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UICorner" referent="RBX816797155CDE4F07AE1415F5DBF6CC91">
+				<Item class="UICorner" referent="RBX6F692AD2BDA543DA98ED35598E248017">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.0299999993</S>
@@ -281,7 +282,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBXF305D8EF322A4273B675E1646F55DFAF">
+				<Item class="TextLabel" referent="RBX7B8C8EEF10014316B11957FC10D91DB8">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
@@ -377,7 +378,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX65A2C47CB6AC470983FD302F97B1DE57">
+			<Item class="Frame" referent="RBX8BAFCB16D669466DB0CCF0E72D72709C">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -441,7 +442,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ViewportFrame" referent="RBX7897F59F02F74AE599D8BD8F3444CA47">
+				<Item class="ViewportFrame" referent="RBXB180DBE04B5946C4A2E45E36873D5CF8">
 					<Properties>
 						<Color3 name="Ambient">
 							<R>0.784313738</R>
@@ -540,7 +541,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX27F4FE7F0B4C41309B49452B02A12682">
+					<Item class="UICorner" referent="RBX5C7CFF55F3EA4320A304998C44588882">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.0500000007</S>
@@ -555,7 +556,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UICorner" referent="RBXECA4B5605BA54BE2B45AF4D7E975AFF6">
+				<Item class="UICorner" referent="RBX963169680250442D9828BB0D42B2AC90">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.0500000007</S>
@@ -569,7 +570,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBX58D3700082284B14AFFA29F6CE61A0CD">
+				<Item class="TextLabel" referent="RBXBD453CC9C5A7465F803339AF22071D51">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
@@ -663,7 +664,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX159D0E2ECB154C9A9E5FC5D6D316B958">
+					<Item class="UITextSizeConstraint" referent="RBXEB9E4F61B9E74401A85E42D34418D2CC">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -675,7 +676,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX164996C046634430A8E50113C3A30CC7">
+					<Item class="UIPadding" referent="RBX26F5C279D5064CDA8167BB93149F0195">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.100000001</S>
@@ -702,7 +703,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBX0903B334D5774666A811D52A2D41130C">
+				<Item class="TextLabel" referent="RBX3E9A1AF586084E42BFBF7E828F3731AD">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
@@ -797,7 +798,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX997BC95CA6EA479FA7EECC987B7D0DCB">
+					<Item class="UITextSizeConstraint" referent="RBX3FA5CE94DABF4675A39CDD31BA7DFD40">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -809,7 +810,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX4AC97A1E32D246BB8A23DAD7490213F7">
+					<Item class="UIPadding" referent="RBXFE99B8CD584848AE915E807624CEECE9">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.00999999978</S>
@@ -836,7 +837,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UIStroke" referent="RBXA095D3D11D5946E0809EE4E16C453A7C">
+				<Item class="UIStroke" referent="RBX37E9186F27E44FA39320D9478D042D8B">
 					<Properties>
 						<token name="ApplyStrokeMode">1</token>
 						<UDim name="BorderOffset">
@@ -864,7 +865,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="UIAspectRatioConstraint" referent="RBXE301C509BCB6458DA0D6BC8A8915282A">
+			<Item class="UIAspectRatioConstraint" referent="RBX4CFF39E7C88E4A05AE33E7AA5F286C3E">
 				<Properties>
 					<float name="AspectRatio">1.65241635</float>
 					<token name="AspectType">0</token>
@@ -877,7 +878,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Frame" referent="RBX304F77F95D6A4364A4C92C812CA12E74">
+			<Item class="Frame" referent="RBX97BDDA5825C04B288ED09848AAE33BFB">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -941,7 +942,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBX06D8353168894A1ABC56568531E819D8">
+				<Item class="UICorner" referent="RBX61FD0B68391047E2865BB269B5E5CA1B">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.100000001</S>
@@ -955,7 +956,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextButton" referent="RBX9D50914C76944DCD87FB442259F5A12B">
+				<Item class="TextButton" referent="RBX70B9F3B4641D4C0F8EFCA095D54C1B50">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -1055,7 +1056,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX7EE6F7CF077543E599DFFB876EB5E601">
+					<Item class="UICorner" referent="RBX72DBF9D81A794A7CA9E8B6C4941DB62B">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.200000003</S>
@@ -1069,7 +1070,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UITextSizeConstraint" referent="RBX4042788ADE7F48F3A6D8E1983AB5CCBA">
+					<Item class="UITextSizeConstraint" referent="RBX982A3403144D4F5D8A638F76C837424A">
 						<Properties>
 							<int name="MaxTextSize">90</int>
 							<int name="MinTextSize">1</int>
@@ -1081,7 +1082,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX541E1D760A37493CA430DEC26F303E17">
+					<Item class="UIPadding" referent="RBX9A9B026CB4024C7A80CA25B10BD65754">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.200000003</S>
@@ -1108,7 +1109,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextButton" referent="RBXA6D72C2F7E7843558CD74BA7DE5BF0D2">
+				<Item class="TextButton" referent="RBX2E1F2756A5CA460AA19C515D27865DA7">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -1208,7 +1209,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBXC48D56A6B249493C88E1ACFB63F14AD8">
+					<Item class="UICorner" referent="RBX21C38490BBE84D75A14B8C70DAAA6E9A">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.25</S>
@@ -1222,7 +1223,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UITextSizeConstraint" referent="RBXED01D296A75D405B84A730F96A15E9AD">
+					<Item class="UITextSizeConstraint" referent="RBX91C4AC18D5D4410888A22A0155B7B8FC">
 						<Properties>
 							<int name="MaxTextSize">90</int>
 							<int name="MinTextSize">1</int>
@@ -1234,7 +1235,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX957BF9B9C1744A30B7A5A4BE33670F1A">
+					<Item class="UIPadding" referent="RBX8709BB7B54C940A1A7B6A3B1FFE69330">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.219999999</S>
@@ -1261,7 +1262,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextButton" referent="RBX2195F8AB1D5640EFBC2B42467DB4C8ED">
+				<Item class="TextButton" referent="RBX19EEE0F03E1B485D8CD4E8EAFE11A299">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -1329,9 +1330,9 @@
 						<Ref name="NextSelectionRight">null</Ref>
 						<Ref name="NextSelectionUp">null</Ref>
 						<UDim2 name="Position">
-							<XS>-0.326674342</XS>
+							<XS>-0.207217097</XS>
 							<XO>0</XO>
-							<YS>-1.99923277</YS>
+							<YS>-1.97770143</YS>
 							<YO>0</YO>
 						</UDim2>
 						<float name="Rotation">0</float>
@@ -1339,7 +1340,7 @@
 						<Ref name="SelectionImageObject">null</Ref>
 						<int name="SelectionOrder">0</int>
 						<UDim2 name="Size">
-							<XS>0.196755558</XS>
+							<XS>0.13454482</XS>
 							<XO>0</XO>
 							<YS>0.33955884</YS>
 							<YO>0</YO>
@@ -1361,7 +1362,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX8B39B1880ADE42C38D9A43B2FC6667C9">
+					<Item class="UICorner" referent="RBX41A83DB6B6974746B503A92D3EA7DC4E">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0</S>
@@ -1375,7 +1376,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UITextSizeConstraint" referent="RBXC8CC877A5C1E496CB74408A22357269B">
+					<Item class="UITextSizeConstraint" referent="RBXB952C5F8F6554BBD98EC505F6B26EC41">
 						<Properties>
 							<int name="MaxTextSize">90</int>
 							<int name="MinTextSize">1</int>
@@ -1387,7 +1388,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX5C5FBE10F8714D00B1858EFC69FB5023">
+					<Item class="UIPadding" referent="RBXABFF177DA666437696467720F7733274">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.219999999</S>
@@ -1414,7 +1415,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextButton" referent="RBX72EE894236004EFC9243423FD59EF87E">
+				<Item class="TextButton" referent="RBX5980049898DE42CF8F10A60FF73C0E33">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -1514,7 +1515,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX279948E3905E48F2853DC42012C542F9">
+					<Item class="UICorner" referent="RBX3C40801B8AF34EE8802EFDA52E88D3C1">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.25</S>
@@ -1528,7 +1529,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UITextSizeConstraint" referent="RBX765CD61D53454F30810E64C7E85160F0">
+					<Item class="UITextSizeConstraint" referent="RBX3B344BDC6A774A42A17F3727FCEEF29D">
 						<Properties>
 							<int name="MaxTextSize">90</int>
 							<int name="MinTextSize">1</int>
@@ -1540,7 +1541,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBXDA497DF2C0E1474B81EA48DC9BDF07D7">
+					<Item class="UIPadding" referent="RBXF8C37010444749AC9D529FEB2F338493">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.219999999</S>
@@ -1568,7 +1569,7 @@
 					</Item>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBXA56A3A28FA6F46DE9BCA7F25CCC8AA83">
+			<Item class="Frame" referent="RBX5AB5E6BB04934EADA3CE2A94ABBAE78B">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -1632,7 +1633,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ViewportFrame" referent="RBXBE40D915CF4E4F368924B94E5EA7C016">
+				<Item class="ViewportFrame" referent="RBXF3B253A88F7F4A3098A1FDD633EF63C4">
 					<Properties>
 						<Color3 name="Ambient">
 							<R>0.784313738</R>
@@ -1731,7 +1732,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX635C50A7111A4A27A6A47D5D49E169E6">
+					<Item class="UICorner" referent="RBX6B747C6198B84552B774DC7A6EDE39A8">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.0500000007</S>
@@ -1746,7 +1747,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UICorner" referent="RBX00647FBFB47B4B93B63C19F9A57BB967">
+				<Item class="UICorner" referent="RBX41E2FF5F153C4B3192AF29265E94539E">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.0500000007</S>
@@ -1760,7 +1761,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBX10F23A9BCE34445E83E9322D24595FF9">
+				<Item class="TextLabel" referent="RBXE8CDBA8A7CF748938642A90A3F71F019">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/GothamSSm.json</url></Family>
@@ -1854,7 +1855,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX5B52A9E1CFD944BF84A891A8E962C0BF">
+					<Item class="UITextSizeConstraint" referent="RBX87B3B14BE7C8414A9E49B79A9F2F02BF">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -1866,7 +1867,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBXBAE396ECAA7349A2AF0B055BB4F9E5AD">
+					<Item class="UIPadding" referent="RBXA82791E0DBC64CAD840E055404843977">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.100000001</S>
@@ -1893,7 +1894,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBXBA3FBF54C8CF44A09BC80555025615B7">
+				<Item class="TextLabel" referent="RBX4EE15D12BF2C402290388946048F08C4">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/Arial.json</url></Family>
@@ -1988,7 +1989,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBXD9357C0DF6324632B023860DB523CDEA">
+					<Item class="UITextSizeConstraint" referent="RBX3ED8FAD280E34855B9E5AE1C3C59D211">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -2000,7 +2001,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBXAC4B32AA8E8A4434B48BEE4644134B33">
+					<Item class="UIPadding" referent="RBX3DB39EB20F4C482DB33D17AD02924B9F">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.00999999978</S>
@@ -2027,7 +2028,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UIStroke" referent="RBXACB529871D8941C9964F041EBE0F2D5F">
+				<Item class="UIStroke" referent="RBX7C2AF1A619EA417D9B217D63F7BEE691">
 					<Properties>
 						<token name="ApplyStrokeMode">1</token>
 						<UDim name="BorderOffset">
@@ -2055,7 +2056,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX9A304AD224CD41A687083AF70CAD9536">
+			<Item class="Frame" referent="RBX05678DA08FD04FBFBA116795981668F6">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -2119,7 +2120,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBX5FEE47117AAA40D89D097787608B64B3">
+				<Item class="UICorner" referent="RBXF5BFCFA5323142038EC9F68C134709B0">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.200000003</S>
@@ -2133,7 +2134,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="Frame" referent="RBX24393D91692948FFB4EAE67F8BCA3FD5">
+				<Item class="Frame" referent="RBXEC6CD693AF9149EA87FB5EF0E7F585E4">
 					<Properties>
 						<token name="Style">0</token>
 						<bool name="Active">false</bool>
@@ -2197,7 +2198,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="TextButton" referent="RBX0E4F647DB69349A581CD1E49BD18AC33">
+					<Item class="TextButton" referent="RBXBB72373499794B42A387C162A9EAD2F0">
 						<Properties>
 							<Font name="FontFace">
 								<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -2297,7 +2298,7 @@
 							<int64 name="SourceAssetId">-1</int64>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
-						<Item class="UICorner" referent="RBXF818CF2FFC77497C921ABFDC3294F3DE">
+						<Item class="UICorner" referent="RBX64AA6CE017C647C1A78A410AD5F99875">
 							<Properties>
 								<UDim name="CornerRadius">
 									<S>1</S>
@@ -2311,7 +2312,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="UIPadding" referent="RBXEA19A2F6EC1D40AF9FD8C78AEFD13D9C">
+						<Item class="UIPadding" referent="RBXB2603F5D26C641CEBF01AB46519A6322">
 							<Properties>
 								<UDim name="PaddingBottom">
 									<S>0.219999999</S>
@@ -2337,7 +2338,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="UITextSizeConstraint" referent="RBXA3F037080A93454A8835CB703B865385">
+						<Item class="UITextSizeConstraint" referent="RBXED29986328FF4450BFB08FA43B1B31BD">
 							<Properties>
 								<int name="MaxTextSize">90</int>
 								<int name="MinTextSize">1</int>
@@ -2351,7 +2352,7 @@
 						</Item>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBX607850CACE7146FBA38A36C7DBC607CD">
+				<Item class="TextLabel" referent="RBXF85B9A3661294F6F916B6AA2DF25CA4D">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -2445,7 +2446,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX0130F1E3E02D4617982987A54BB873C3">
+					<Item class="UITextSizeConstraint" referent="RBX3CA2B7E6C7424B18917897009E5C53DC">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -2457,7 +2458,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX38BCC9BF13994C5595634078389DBA82">
+					<Item class="UIPadding" referent="RBX1244261DE5154620BF243209772D87EF">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -2484,7 +2485,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBXF6CA65569E934293A2877CA2712F28A7">
+				<Item class="TextLabel" referent="RBX1E38B0D5A1E14C72AA5BD315B632F25B">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -2578,7 +2579,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBXF7ABD761B892458098F5DF1B0D4C9EC9">
+					<Item class="UITextSizeConstraint" referent="RBX2872F5187A944370BB53283F69E8AC4A">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -2590,7 +2591,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX04F54D6023D14863B770D1BE4F8BD77E">
+					<Item class="UIPadding" referent="RBX2484F5625BDA4FCC997F53F2D3C8AC62">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.25</S>
@@ -2618,7 +2619,7 @@
 					</Item>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX6D12E58CAB2E4A87B0815C3222124F3F">
+			<Item class="Frame" referent="RBXC53AF313E99E4344A9DDAE13870D27EE">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -2682,7 +2683,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBX67CD3D9F586C4DCCA55F65010A5D7722">
+				<Item class="UICorner" referent="RBX23CAFBCA689D4510B43F46E22124B343">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.300000012</S>
@@ -2696,7 +2697,7 @@
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBX10815C1396E14B8393F5021C9636F15F">
+				<Item class="TextLabel" referent="RBXE1358188949D447C8FE434C94EAD9C61">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -2790,7 +2791,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBXB6E019E7C9C1448B9086F68032610910">
+					<Item class="UITextSizeConstraint" referent="RBXCCDCCD6BF96B460AA9386701644D7B22">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -2802,7 +2803,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX7DE7A7538AD246429D698B777216046A">
+					<Item class="UIPadding" referent="RBX6BD004DECC454971B90223EE1207530C">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -2829,7 +2830,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="Frame" referent="RBX2DD5317BD753471D923176C4BB7DCBF6">
+				<Item class="Frame" referent="RBXEA24134714904672AD302C5483C5B9E2">
 					<Properties>
 						<token name="Style">0</token>
 						<bool name="Active">false</bool>
@@ -2893,7 +2894,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="ImageButton" referent="RBX359F12A275E34B7ABDC59ABE67C675FC">
+					<Item class="ImageButton" referent="RBX7B5F5AC331B8445E8738B0B5F8643587">
 						<Properties>
 							<Content name="HoverImage"><null></null></Content>
 							<Content name="Image"><url>rbxassetid://9620223033</url></Content>
@@ -2999,7 +3000,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UICorner" referent="RBX340B7A7E8B204BBC92E8DDB88C07DF24">
+					<Item class="UICorner" referent="RBXA8F3006DED484989A69D944338A701C1">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.200000003</S>
@@ -3013,7 +3014,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Frame" referent="RBX825A248BCF8A436A912B827DD8906682">
+					<Item class="Frame" referent="RBXC1C7F8B07E7B4F9AA3BB3854AE6850D4">
 						<Properties>
 							<token name="Style">0</token>
 							<bool name="Active">false</bool>
@@ -3047,7 +3048,7 @@
 							<UDim2 name="Position">
 								<XS>-13.8925333</XS>
 								<XO>0</XO>
-								<YS>-4.64088964</YS>
+								<YS>-2.87886</YS>
 								<YO>0</YO>
 							</UDim2>
 							<float name="Rotation">0</float>
@@ -3057,7 +3058,7 @@
 							<UDim2 name="Size">
 								<XS>15.2592592</XS>
 								<XO>0</XO>
-								<YS>3.81481481</YS>
+								<YS>2.05278516</YS>
 								<YO>0</YO>
 							</UDim2>
 							<token name="SizeConstraint">0</token>
@@ -3077,7 +3078,7 @@
 							<int64 name="SourceAssetId">-1</int64>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
-						<Item class="UICorner" referent="RBX061FA37C31E84F91A4094395A13E228C">
+						<Item class="UICorner" referent="RBXC52741BEAE8649D9A21531B21DB28341">
 							<Properties>
 								<UDim name="CornerRadius">
 									<S>0.0599999987</S>
@@ -3091,7 +3092,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="UIStroke" referent="RBXE160B4F56E8E491F8AB3BCB5910693F3">
+						<Item class="UIStroke" referent="RBX6E190D30739C4506A19BB557822F9181">
 							<Properties>
 								<token name="ApplyStrokeMode">0</token>
 								<UDim name="BorderOffset">
@@ -3118,7 +3119,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="TextButton" referent="RBX24845D5AFC0D46AAA86425FF141E5F2C">
+						<Item class="TextButton" referent="RBXCBE306335CED4C959E8A2BE32B29C8CF">
 							<Properties>
 								<Font name="FontFace">
 									<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -3186,9 +3187,9 @@
 								<Ref name="NextSelectionRight">null</Ref>
 								<Ref name="NextSelectionUp">null</Ref>
 								<UDim2 name="Position">
-									<XS>0.96236217</XS>
+									<XS>0.949289799</XS>
 									<XO>0</XO>
-									<YS>0.0932312161</YS>
+									<YS>0.0932318568</YS>
 									<YO>0</YO>
 								</UDim2>
 								<float name="Rotation">0</float>
@@ -3196,9 +3197,9 @@
 								<Ref name="SelectionImageObject">null</Ref>
 								<int name="SelectionOrder">0</int>
 								<UDim2 name="Size">
-									<XS>0.06832432</XS>
+									<XS>0.0813967064</XS>
 									<XO>0</XO>
-									<YS>0.226236016</YS>
+									<YS>0.420083731</YS>
 									<YO>0</YO>
 								</UDim2>
 								<token name="SizeConstraint">0</token>
@@ -3218,7 +3219,7 @@
 								<int64 name="SourceAssetId">-1</int64>
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
-							<Item class="UICorner" referent="RBXF5935F698DA94A0793A79D2189878826">
+							<Item class="UICorner" referent="RBX488C8C2C14544CBE97C73DE2E75F686B">
 								<Properties>
 									<UDim name="CornerRadius">
 										<S>0</S>
@@ -3232,7 +3233,7 @@
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
 							</Item>
-							<Item class="UITextSizeConstraint" referent="RBX2C43C14A36914196B96F5E5E8AC1099D">
+							<Item class="UITextSizeConstraint" referent="RBXF69029434339457187E409C1B06B28DD">
 								<Properties>
 									<int name="MaxTextSize">90</int>
 									<int name="MinTextSize">1</int>
@@ -3244,7 +3245,7 @@
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
 							</Item>
-							<Item class="UIPadding" referent="RBXDD34B5300F704F59A60633949373DCFB">
+							<Item class="UIPadding" referent="RBX784F49F45781458A9BDAC95FD3A450D8">
 								<Properties>
 									<UDim name="PaddingBottom">
 										<S>0.219999999</S>
@@ -3271,7 +3272,7 @@
 								</Properties>
 							</Item>
 						</Item>
-						<Item class="TextLabel" referent="RBX46A0CE043921448F8C52DF4DEAFFB2FB">
+						<Item class="TextLabel" referent="RBX5EB9E0FB449145A9AA3463505C90102E">
 							<Properties>
 								<Font name="FontFace">
 									<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -3284,7 +3285,7 @@
 								<int name="MaxVisibleGraphemes">-1</int>
 								<string name="OpenTypeFeatures"></string>
 								<bool name="RichText">true</bool>
-								<string name="Text">Are you liking the plugin so far? Don&apos;t forget to like and favorite. Maybe write a review too. You can &lt;font color=&quot;#22ff00&quot;&gt;donate and help&lt;/font&gt; me making this plugin better by buying the Paid version &lt;font color=&quot;#ffff6a&quot;&gt;ThumbMaker - Donator Edition&lt;/font&gt;. Although this version does not have any additional features from the free version, the money raised will help and motivate me to improve the free version with new features. </string>
+								<string name="Text">Are you liking the plugin so far? Don&apos;t forget to like and favorite. Maybe write a review too. You can &lt;font color=&quot;#22ff00&quot;&gt;donate and help&lt;/font&gt; me to improve this free plugin with new features. </string>
 								<Color3 name="TextColor3">
 									<R>1</R>
 									<G>1</G>
@@ -3365,7 +3366,7 @@
 								<int64 name="SourceAssetId">-1</int64>
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
-							<Item class="UITextSizeConstraint" referent="RBX891FF75F11554B42AE06A16EBA1DDFA2">
+							<Item class="UITextSizeConstraint" referent="RBX613DD5CE6965452F8209EDF2D040ECB7">
 								<Properties>
 									<int name="MaxTextSize">45</int>
 									<int name="MinTextSize">1</int>
@@ -3377,7 +3378,7 @@
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
 							</Item>
-							<Item class="UIPadding" referent="RBX7114D21CE22A4540915F41CABE03AB97">
+							<Item class="UIPadding" referent="RBXA9D113F796E9423D8EC489F6D01537FF">
 								<Properties>
 									<UDim name="PaddingBottom">
 										<S>0.119999997</S>
@@ -3406,7 +3407,7 @@
 						</Item>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBXE6ACB850DB7C48D5A60633929C3C3C28">
+				<Item class="TextLabel" referent="RBXBFD8166D31E64766B42C35B2D17A0B4E">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -3500,7 +3501,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX311557C4EC9E48F2818507C51013BAB1">
+					<Item class="UITextSizeConstraint" referent="RBX6F6B2107D77244178DBC4624776D4A28">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -3512,7 +3513,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX314EF5F25CDB448AAC215A1947135650">
+					<Item class="UIPadding" referent="RBXA759817F9A0E4DBE8AAE6B17E77BD569">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -3538,7 +3539,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIStroke" referent="RBX4EB139E1F7754446ACE96FF6CA679A6C">
+					<Item class="UIStroke" referent="RBXB2F9AC861E1249FB94753316CEAA9F7D">
 						<Properties>
 							<token name="ApplyStrokeMode">1</token>
 							<UDim name="BorderOffset">
@@ -3565,7 +3566,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UICorner" referent="RBX35C192AE0FF04D1F8C63667345B8F4B0">
+					<Item class="UICorner" referent="RBXEACFC3296BFA421BB94F6CE230227B48">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.25</S>
@@ -3580,7 +3581,7 @@
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="Frame" referent="RBX8BF56273E3BC4C0AA9FE6180CB9D8935">
+				<Item class="Frame" referent="RBX32739AABE19C4374A1095F68EBBA25A7">
 					<Properties>
 						<token name="Style">0</token>
 						<bool name="Active">false</bool>
@@ -3644,7 +3645,7 @@
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="ImageButton" referent="RBXE1B6C8ED8A8B420A87D00A170D41D880">
+					<Item class="ImageButton" referent="RBXD1227BC645A94776A32AD00C92573CB0">
 						<Properties>
 							<Content name="HoverImage"><null></null></Content>
 							<Content name="Image"><url>rbxassetid://15668939723</url></Content>
@@ -3750,7 +3751,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UICorner" referent="RBX02594BDDF44D44828F4B41A69B6192A6">
+					<Item class="UICorner" referent="RBX8108A7D3160E49AEB9AFCB8E791C42C2">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.200000003</S>
@@ -3764,7 +3765,7 @@
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Frame" referent="RBX8038E225666B4D40A3F8B5D8BE9C2DE8">
+					<Item class="Frame" referent="RBX9A878512655D4D79AD00C6D0692A709C">
 						<Properties>
 							<token name="Style">0</token>
 							<bool name="Active">false</bool>
@@ -3828,7 +3829,7 @@
 							<int64 name="SourceAssetId">-1</int64>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
-						<Item class="UICorner" referent="RBXD71CB4D0CA7F4B0FA86942E5B6145914">
+						<Item class="UICorner" referent="RBX01732CFE941C474EB630C91AA4E2A2EF">
 							<Properties>
 								<UDim name="CornerRadius">
 									<S>0.0199999996</S>
@@ -3842,7 +3843,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="UIStroke" referent="RBX2EB0E3381E124C84B4E5A9C155BA183A">
+						<Item class="UIStroke" referent="RBX99B1675D2A6447B9813AF0C1CC9A920B">
 							<Properties>
 								<token name="ApplyStrokeMode">0</token>
 								<UDim name="BorderOffset">
@@ -3869,7 +3870,7 @@
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
 						</Item>
-						<Item class="TextButton" referent="RBXE4646C8061E54C33A91971FD2E840768">
+						<Item class="TextButton" referent="RBXEA0073CCDCC0488EBE606DCB0C6E44B2">
 							<Properties>
 								<Font name="FontFace">
 									<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -3937,9 +3938,9 @@
 								<Ref name="NextSelectionRight">null</Ref>
 								<Ref name="NextSelectionUp">null</Ref>
 								<UDim2 name="Position">
-									<XS>0.951039851</XS>
+									<XS>0.93031615</XS>
 									<XO>0</XO>
-									<YS>0.0373586975</YS>
+									<YS>0.0373587012</YS>
 									<YO>0</YO>
 								</UDim2>
 								<float name="Rotation">0</float>
@@ -3947,7 +3948,7 @@
 								<Ref name="SelectionImageObject">null</Ref>
 								<int name="SelectionOrder">0</int>
 								<UDim2 name="Size">
-									<XS>0.0806484818</XS>
+									<XS>0.101372369</XS>
 									<XO>0</XO>
 									<YS>0.0714548454</YS>
 									<YO>0</YO>
@@ -3969,7 +3970,7 @@
 								<int64 name="SourceAssetId">-1</int64>
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
-							<Item class="UICorner" referent="RBXDFDE86B97F9A43F4BDEC34E01E226AA6">
+							<Item class="UICorner" referent="RBX1A3E5D69149F458FB527BC41A4733FF1">
 								<Properties>
 									<UDim name="CornerRadius">
 										<S>0</S>
@@ -3983,7 +3984,7 @@
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
 							</Item>
-							<Item class="UITextSizeConstraint" referent="RBX2CE0B8AFADF8439998B4F0F5BB3D5B3D">
+							<Item class="UITextSizeConstraint" referent="RBX583930709CBC42598FF580E28044900E">
 								<Properties>
 									<int name="MaxTextSize">90</int>
 									<int name="MinTextSize">1</int>
@@ -3995,7 +3996,7 @@
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
 							</Item>
-							<Item class="UIPadding" referent="RBXF386BB599E754CD8A002F5767DD3D831">
+							<Item class="UIPadding" referent="RBX8635530B6F1E420FAC0238712C515EF1">
 								<Properties>
 									<UDim name="PaddingBottom">
 										<S>0.219999999</S>
@@ -4022,7 +4023,7 @@
 								</Properties>
 							</Item>
 						</Item>
-						<Item class="ScrollingFrame" referent="RBX3D7AE3DB51EC4CD8BCA31FB49156C4BB">
+						<Item class="ScrollingFrame" referent="RBX159F1CDB346D48E98029F05D4FE24E5C">
 							<Properties>
 								<token name="AutomaticCanvasSize">0</token>
 								<Content name="BottomImage"><url>rbxasset://textures/ui/Scroll/scroll-bottom.png</url></Content>
@@ -4033,7 +4034,7 @@
 								<UDim2 name="CanvasSize">
 									<XS>0</XS>
 									<XO>0</XO>
-									<YS>2.9000001</YS>
+									<YS>3.29999995</YS>
 									<YO>0</YO>
 								</UDim2>
 								<token name="ElasticBehavior">0</token>
@@ -4112,7 +4113,7 @@
 								<int64 name="SourceAssetId">-1</int64>
 								<BinaryString name="Tags"></BinaryString>
 							</Properties>
-							<Item class="TextLabel" referent="RBX4D94C7C43C2040CF926F36EE0F36EA7D">
+							<Item class="TextLabel" referent="RBXD23EA6DF3B19453CBC656921FA5A2C28">
 								<Properties>
 									<Font name="FontFace">
 										<Family><url>rbxasset://fonts/families/Ubuntu.json</url></Family>
@@ -4125,15 +4126,20 @@
 									<int name="MaxVisibleGraphemes">-1</int>
 									<string name="OpenTypeFeatures"></string>
 									<bool name="RichText">true</bool>
-									<string name="Text"><![CDATA[Changelog
+									<string name="Text"><![CDATA[<b>Credits:</b>
 
-[1.1.0] - 2026-04-14
+Plugin author: <b>@RenanMSV</b>
+With the help of: <b>@Jademaus</b>, <b>@RZKU</b>
+
+Changelog
+
+[1.1.0] - 2026-04-18
 
 Added
 
-- Button to change camera mode from Perspective to Orthographic, by @Jademaus.
-- Nudge camera with keyboard for fine positioning of the Camera, by @Jademaus.
-- When switching from Normal to Orthographic view the Thumbnails stays roughly the same, by @Jademaus.
+- Button to change camera mode from Perspective to Orthographic, by  <b>@Jademaus</b>.
+- Smoothing the Camera for fine positioning when using Orthographic view, by  <b>@Jademaus</b>.
+- When switching from Normal to Orthographic view the Thumbnails stays roughly the same, by  <b>@Jademaus</b>.
 
 Changed
 
@@ -4278,7 +4284,7 @@ Added
 									<int64 name="SourceAssetId">-1</int64>
 									<BinaryString name="Tags"></BinaryString>
 								</Properties>
-								<Item class="UITextSizeConstraint" referent="RBXA3AB4046700E4DE0ACC28C00E07ABE80">
+								<Item class="UITextSizeConstraint" referent="RBXF90CB88154A24654B6FCD2546B2E3B3A">
 									<Properties>
 										<int name="MaxTextSize">100</int>
 										<int name="MinTextSize">1</int>
@@ -4290,7 +4296,7 @@ Added
 										<BinaryString name="Tags"></BinaryString>
 									</Properties>
 								</Item>
-								<Item class="UIPadding" referent="RBX0DECA63E4A4D4AE7A3D437B3CA417020">
+								<Item class="UIPadding" referent="RBX1AEF26A5DAEB44E78A52EDDA60743562">
 									<Properties>
 										<UDim name="PaddingBottom">
 											<S>0</S>
@@ -4320,7 +4326,7 @@ Added
 						</Item>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBXDAA9ADD665844CD195782AB972B1DE5C">
+				<Item class="TextLabel" referent="RBX16673D7A7D6F45A1933F4B1300F5EE87">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -4415,7 +4421,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX26837F09424E44C9BF8459D7D4FFDED2">
+					<Item class="UITextSizeConstraint" referent="RBXC3B90DE0951647F98C2466B4DC28B05C">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -4427,7 +4433,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIStroke" referent="RBX517C04B05D1747B9A618E85DA907E7B5">
+					<Item class="UIStroke" referent="RBX9DA04E027B3445B18EF72D2A2412B8C7">
 						<Properties>
 							<token name="ApplyStrokeMode">1</token>
 							<UDim name="BorderOffset">
@@ -4454,7 +4460,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX6A10122F5AD34733B2EDFF1A7B24301F">
+					<Item class="UIPadding" referent="RBX037B146662D84096B1D437193C0A8970">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.0500000007</S>
@@ -4480,7 +4486,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UICorner" referent="RBX02F3E1FB436F4E53B37263030995C406">
+					<Item class="UICorner" referent="RBX910EB326A98E4F2FB8A63601B4982FBC">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.0500000007</S>
@@ -4496,7 +4502,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 					</Item>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX6245806EE7BB48BA96941E81026F31C3">
+			<Item class="Frame" referent="RBX99B6ACA2636F4773A65DB178D6EE991F">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -4560,7 +4566,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBX86E2F9F9737B48649FAE31D5A89A30E3">
+				<Item class="UICorner" referent="RBX8CFE54DBF1CC46C28DC255EEDE9A4C1C">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.200000003</S>
@@ -4574,7 +4580,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBX0C3AE942BD314516B827C0957B0E0104">
+				<Item class="TextLabel" referent="RBXAB7FE7BC9F8B42638AE7A20A1CCE1398">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -4668,7 +4674,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX9067E35382714DB5BE4B9C5A2DED37D8">
+					<Item class="UITextSizeConstraint" referent="RBX8C3210714238407DA80B81DA356FFE17">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -4680,7 +4686,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBXE588E27F50F84E809AF52EFDF04E4BDE">
+					<Item class="UIPadding" referent="RBXC59FF0D02EBB47DE8B888B69E86942D9">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.280000001</S>
@@ -4707,7 +4713,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="TextLabel" referent="RBXC3ACBBEE24264142A75A93F09ACC7A3A">
+				<Item class="TextLabel" referent="RBX02081DF98CC14D38860B865EF19017C0">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -4801,7 +4807,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX5566BE98158145CEA2D5AC2F47CAC726">
+					<Item class="UITextSizeConstraint" referent="RBX85E8C1819B214F37AB29374344F26B9C">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -4813,7 +4819,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBXEF9DE104AEC7409E9269BD5428F28CCE">
+					<Item class="UIPadding" referent="RBX64B242E696BD4E95ABCF9623620A6220">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.300000012</S>
@@ -4840,7 +4846,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="ImageButton" referent="RBX80E4D16FC522443091D8840FEB9581D3">
+				<Item class="ImageButton" referent="RBX26E903B7A88342D9B069D1A75B0BB2BD">
 					<Properties>
 						<Content name="HoverImage"><null></null></Content>
 						<Content name="Image"><url>rbxassetid://13364258627</url></Content>
@@ -4945,7 +4951,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBXF1F2A371E3F44A8B83B54A2C49CF0D9F">
+					<Item class="UICorner" referent="RBXCD0FBF1D1286445A8724949FF97A51A4">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.200000003</S>
@@ -4959,7 +4965,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBXC37AC366CAEB4CE487F3EBF48D94A6C0">
+					<Item class="Decal" referent="RBX9732A79582B54FBB89A18EA0F0A124B4">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -4992,7 +4998,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBXB8C3C9577BF844CEBF74D2837BB08901">
+					<Item class="Decal" referent="RBX58542C4AB801446D9F5CDEF5C836D186">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -5025,7 +5031,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBX642407426D5D46009A7B70753F82B654">
+					<Item class="Decal" referent="RBX91E88DFBFBE3456DB40006232D82AFAB">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -5059,7 +5065,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="ImageButton" referent="RBXF9B5A0E1CDFD4309A55B8AF924A20007">
+				<Item class="ImageButton" referent="RBX7FBF5D2C861447CBB4DDCD39FA6019C2">
 					<Properties>
 						<Content name="HoverImage"><null></null></Content>
 						<Content name="Image"><url>rbxassetid://8445471332</url></Content>
@@ -5164,7 +5170,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UICorner" referent="RBX98AA8834D03B4EB6BFCC70CBF727137A">
+					<Item class="UICorner" referent="RBX5ACF4BD41D5946ACA4C8EA3FA784B77E">
 						<Properties>
 							<UDim name="CornerRadius">
 								<S>0.200000003</S>
@@ -5178,7 +5184,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBXB03FD2B3BEEF4064AD41B0B2F2FAE5F1">
+					<Item class="Decal" referent="RBX8094C1CC084C4A9F9777E4D7C9E11E0A">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -5211,7 +5217,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBX33AC7DC8BBA14CC9AB2784C4005E703A">
+					<Item class="Decal" referent="RBX29106D240C3F4D27B0DA551E1D4123BF">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -5244,7 +5250,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="Decal" referent="RBXA8536778534B4936B8C595C0BBF22911">
+					<Item class="Decal" referent="RBX570C4991445F48029DB7EC38A524FAB9">
 						<Properties>
 							<Color3 name="Color3">
 								<R>1</R>
@@ -5279,7 +5285,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 					</Item>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBXFC53BB299C2948CA9F85C0DD42285B06">
+			<Item class="Frame" referent="RBXC66990841F3F4741ADF16F758C252DFD">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -5343,7 +5349,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="UICorner" referent="RBXE1095CA0E6794E17940622B7D9684454">
+				<Item class="UICorner" referent="RBXAF567B1612E84225BB13688C22229647">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.300000012</S>
@@ -5357,7 +5363,7 @@ It may look zoomed out in the "<font color="#ECBD02">Save to Roblox</font>"windo
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBXBFAF9D1073E84324B415AC175875F891">
+				<Item class="TextLabel" referent="RBXA30CDD0A11E74304AC3C38959529509E">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -5452,7 +5458,7 @@ by xMoon Games Studio]]></string>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX8480B4F181E44E8D9C3417BBAD2981C5">
+					<Item class="UITextSizeConstraint" referent="RBX023E26FFF66E406AAE8475F71763AAD3">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -5464,7 +5470,7 @@ by xMoon Games Studio]]></string>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX57D9EE8DC1E6465985E51E10E62A7268">
+					<Item class="UIPadding" referent="RBX7C4F9F24DFAB4C9E898DDDAEDA744D6D">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -5491,7 +5497,7 @@ by xMoon Games Studio]]></string>
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="ImageLabel" referent="RBX54B3E3ACFA0D42BF914DD0060D414470">
+				<Item class="ImageLabel" referent="RBXBC0A8B2CC6124E4E8B2B482883BFF801">
 					<Properties>
 						<Content name="Image"><url>rbxassetid://14034112968</url></Content>
 						<Color3 name="ImageColor3">
@@ -5589,7 +5595,7 @@ by xMoon Games Studio]]></string>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
 				</Item>
-				<Item class="TextLabel" referent="RBXE501FF57B88545A8BFFBD0FF717E3F4E">
+				<Item class="TextLabel" referent="RBX76C3BB20976B4877BF2DC8C67881311E">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -5683,7 +5689,7 @@ by xMoon Games Studio]]></string>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBX39BE7F55F191487785BB54666FF98805">
+					<Item class="UITextSizeConstraint" referent="RBX2864704E7F024B71AC2ACE5EC2882B09">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -5695,7 +5701,7 @@ by xMoon Games Studio]]></string>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX24B5E25D067F4906BEF95DE459BDFBA6">
+					<Item class="UIPadding" referent="RBX60C6CAF5DEA0437DB2A41501266F7E1C">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -5723,7 +5729,7 @@ by xMoon Games Studio]]></string>
 					</Item>
 				</Item>
 			</Item>
-			<Item class="Frame" referent="RBX14CA5BE02C664E7D8FBCD06D05094534">
+			<Item class="Frame" referent="RBX8158C9784C254E28818965FAFB13AC8D">
 				<Properties>
 					<token name="Style">0</token>
 					<bool name="Active">false</bool>
@@ -5787,7 +5793,7 @@ by xMoon Games Studio]]></string>
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="TextLabel" referent="RBX329BE62B258A482E9407D1CD692734BC">
+				<Item class="TextLabel" referent="RBXEDB9600D40AD4F5EBBDF2627D0B9EC40">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/JosefinSans.json</url></Family>
@@ -5881,7 +5887,7 @@ by xMoon Games Studio]]></string>
 						<int64 name="SourceAssetId">-1</int64>
 						<BinaryString name="Tags"></BinaryString>
 					</Properties>
-					<Item class="UITextSizeConstraint" referent="RBXE2909968A927409C871CF2D17BA2BFAC">
+					<Item class="UITextSizeConstraint" referent="RBXED240E0ED6F549C7A4321C3A598AE011">
 						<Properties>
 							<int name="MaxTextSize">45</int>
 							<int name="MinTextSize">1</int>
@@ -5893,7 +5899,7 @@ by xMoon Games Studio]]></string>
 							<BinaryString name="Tags"></BinaryString>
 						</Properties>
 					</Item>
-					<Item class="UIPadding" referent="RBX95DBC199E67449259F1F4D62029D3172">
+					<Item class="UIPadding" referent="RBX98DD4E946E62453F9054CFC6B05C249E">
 						<Properties>
 							<UDim name="PaddingBottom">
 								<S>0.119999997</S>
@@ -5920,7 +5926,7 @@ by xMoon Games Studio]]></string>
 						</Properties>
 					</Item>
 				</Item>
-				<Item class="UICorner" referent="RBX8AA642AD4D3D4A9E957A0151D0021889">
+				<Item class="UICorner" referent="RBXEAE3F1C84E9E4F2FA7A6F30C5934A85D">
 					<Properties>
 						<UDim name="CornerRadius">
 							<S>0.200000003</S>
