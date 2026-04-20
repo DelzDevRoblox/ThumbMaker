@@ -114,6 +114,7 @@ export type ThumbMakerPluginType = {
 
   _resetCameraOffset: (self: ThumbMakerPluginType) -> (),
   _resetCameraOffsetAccessory: (self: ThumbMakerPluginType) -> (),
+  _loadCameraStateFallback: (self: ThumbMakerPluginType, instance: Instance, target: Camera) -> (),
 
   _moveCameraTo: (self: ThumbMakerPluginType, cframe: CFrame) -> (),
 

@@ -692,31 +692,32 @@ end
 
 function ThumbMakerPlugin:_resetCameraOffset()
   local self: ThumbMakerPluginType = self
-  pcall(function()
-    if not self._selected.instance then return end
-    if self._selected.instance:IsA("Accessory") then self:_resetCameraOffsetAccessory(); return end
-    local camera = Utils:GetCamera()
-    local thumbnailCamera: Camera = self._selected.instance:FindFirstChild("ThumbnailCamera") :: Camera
-    self:_loadCameraState(thumbnailCamera)
-    self:_setWarningText("Restored camera offset to a saved state", 2)
-  end)
+  local selected: Instance? = self._selected.instance
+  if not selected then return end
+  if selected:IsA("Accessory") then self:_resetCameraOffsetAccessory(); return end
+  local thumbnailCamera: Camera = selected:FindFirstChild("ThumbnailCamera") :: Camera
+  self:_loadCameraState(thumbnailCamera)
+  self:_setWarningText("Restored camera offset to a saved state", 2)
 end
 
 function ThumbMakerPlugin:_resetCameraOffsetAccessory()
   local self: ThumbMakerPluginType = self
-  pcall(function()
-    if not self._selected.instance then return end
-    local thumbnailConfiguration: Configuration = self._selected.instance:FindFirstChild("ThumbnailConfiguration") :: Configuration
-    if not thumbnailConfiguration then return end
+  local selected: Instance? = self._selected.instance
+  if not selected then return end
+  
+  local thumbnailConfiguration: Configuration = selected:FindFirstChild("ThumbnailConfiguration") :: Configuration
+  if not thumbnailConfiguration then return end
 
-    local target: ObjectValue = thumbnailConfiguration:FindFirstChild("ThumbnailCameraTarget") :: ObjectValue
-    local offset: CFrameValue = thumbnailConfiguration:FindFirstChild("ThumbnailCameraValue") :: CFrameValue
-    if not target or not offset or not target.Value or not offset.Value or not target.Value:IsA("BasePart") then return end
+  local target: ObjectValue = thumbnailConfiguration:FindFirstChild("ThumbnailCameraTarget") :: ObjectValue
+  local offset: CFrameValue = thumbnailConfiguration:FindFirstChild("ThumbnailCameraValue") :: CFrameValue
+  if not target or not offset or not target.Value or not offset.Value or not target.Value:IsA("BasePart") then
+    self:_setWarningText("⚠️ Could not find a valid Thumbnail", 2)
+    return
+  end
 
-    local targetValue: BasePart = target.Value :: BasePart
-    self:_moveCameraTo((targetValue.CFrame * offset.Value))
-    self:_setWarningText("Restored camera offset to a saved state", 2)
-  end)
+  local targetValue: BasePart = target.Value :: BasePart
+  self:_moveCameraTo((targetValue.CFrame * offset.Value))
+  self:_setWarningText("Restored camera offset to a saved state", 2)
 end
 
 function ThumbMakerPlugin:_moveCameraTo(cframe: CFrame)
@@ -849,7 +850,9 @@ function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
   local self: ThumbMakerPluginType = self
   local instance: Instance? = self._selected.instance
   if not instance then return end
-  if not target:GetAttribute(ATTR_FLAG) then return end
+  if not target:GetAttribute(ATTR_FLAG) then
+    return self:_loadCameraStateFallback(instance, target :: Camera)
+  end
   local isOrtho = target:GetAttribute(ATTR_IS_ORTHO)
   if isOrtho == nil then return end
   local camera = Utils:GetCamera()
@@ -890,6 +893,26 @@ function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
     self:_forcePerspective(savedFOV)
     self:_FOVSliderSetEnabled(true)
   end
+end
+
+function ThumbMakerPlugin:_loadCameraStateFallback(instance: Instance, target: Camera)
+  -- this is the fallback for when the model was not saved with the new saving format
+  local self: ThumbMakerPluginType = self
+
+  if target:IsA("Configuration") then return end  -- ignore accessories
+  local camera = Utils:GetCamera()
+  local currentSelected: Instance? = self._selected.instance
+  if not currentSelected then return end
+  local offset: CFrame = target:GetAttribute("ThumbnailCameraOffset")
+  if offset then
+    -- load offset that was set as attribute
+    self:_moveCameraTo(self:_findPivot(currentSelected) * offset)
+  else
+    -- if not set, set thumbnail camera cframe, it probably won't be right
+    self:_moveCameraTo(target.CFrame)
+  end
+  camera.FieldOfView = target.FieldOfView
+  self:_FOVSliderSetPosition(target.FieldOfView)
 end
 
 function ThumbMakerPlugin:Destroy()
