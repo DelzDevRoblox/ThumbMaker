@@ -775,9 +775,9 @@ function ThumbMakerPlugin:_FOVSliderCalculatePosition(input: InputObject)
   if self._selected.instance and self._selected.instance:IsA("Accessory") then return end
   local absX: number = self._gui.Sliders.FOV.Bar.AbsolutePosition.X
   local absXMax: number = absX + self._gui.Sliders.FOV.Bar.AbsoluteSize.X
-  local delta: number = Utils:MapToInterval(input.Position.X, absX, absXMax, 0, 1)
+  local delta: number = math.map(input.Position.X, absX, absXMax, 0, 1)
   delta = math.clamp(delta, 0, 1)
-  local newFov: number = Utils:MapToInterval(delta, 0, 1, 0, 120)
+  local newFov: number = math.map(delta, 0, 1, 0, 120)
   local camera = Utils:GetCamera()
   camera.FieldOfView = newFov
   self._gui.Labels.FOV.Text = ("%.0f"):format(newFov)
@@ -785,7 +785,7 @@ function ThumbMakerPlugin:_FOVSliderCalculatePosition(input: InputObject)
 end
 
 function ThumbMakerPlugin:_FOVSliderSetPosition(fov: number)
-  local x: number = Utils:MapToInterval(fov, 0, 120, 0, 1)
+  local x: number = math.map(fov, 0, 120, 0, 1)
   x = math.clamp(x, 0, 1)
   self._gui.Labels.FOV.Text = ("%.0f"):format(fov)
   self._gui.Sliders.FOV.Handle.Position = UDim2.fromScale(x, 0.5)
