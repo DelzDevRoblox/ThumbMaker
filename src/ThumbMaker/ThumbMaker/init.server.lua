@@ -37,7 +37,6 @@ local ATTR_DIR_Z         = "CamDirZ"
 local ATTR_UP_X          = "CamUpX"
 local ATTR_UP_Y          = "CamUpY"
 local ATTR_UP_Z          = "CamUpZ"
-local ATTR_DIST          = "CamDistance"
 local ATTR_LOOK_X        = "CamLookX"
 local ATTR_LOOK_Y        = "CamLookY"
 local ATTR_LOOK_Z        = "CamLookZ"
@@ -222,14 +221,6 @@ function ThumbMakerPlugin:_initGui()
     self:_FOVSliderCalculatePosition(input)
   end)
 
-  -- Nudge camera with arrow keys / WASD when plugin is open
-  --self._nudgeConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-  --  if gameProcessed then return end
-  --  if not self._gui.ScreenGui.Enabled then return end
-  --  if not self._selected.instance then return end
-  --  self:_handleNudgeInput(input)
-  --end)
-
   self:_initScaledPan()
 
   camera:GetPropertyChangedSignal("CFrame"):Connect(function()
@@ -345,7 +336,7 @@ function ThumbMakerPlugin:_onCameraModeChanges()
 end
 
 -- ─────────────────────────────────────────────────────────────
--- NEW: Auto-frame — fits the model's bounding sphere into view
+-- Auto-frame — fits the model's bounding sphere into view
 -- with a small padding, preserving the current camera angle.
 -- By @Jademaus.
 -- ─────────────────────────────────────────────────────────────
@@ -395,9 +386,6 @@ function ThumbMakerPlugin:_autoFrameModel()
   self:_setWarningText("Camera was moved to fit the model", 2)
 
   if self._gui.Props.IsOrthoMode then
-    -- Back-convert the autoframe distance to its perspective equivalent
-    -- so that toggling back to perspective lands at the right apparent size.
-    -- perspDist * tan(perspFOV/2) = orthoDist * tan(orthoFOV/2)
     local orthoFOV: number = fov
     local perspFOV: number = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
     local ratio: number = math.tan(math.rad(orthoFOV / 2)) / math.tan(math.rad(perspFOV / 2))
@@ -409,54 +397,7 @@ function ThumbMakerPlugin:_autoFrameModel()
 end
 
 -- ─────────────────────────────────────────────────────────────
--- NEW: Nudge camera with keyboard for fine positioning.
--- Arrow keys / WASD move the camera relative to its own local axes.
--- Q/E move up/down.  Shift halves the step for micro-adjustments.
--- By @Jademaus.
--- ─────────────────────────────────────────────────────────────
---function ThumbMakerPlugin:_handleNudgeInput(input: InputObject)
---  local self: ThumbMakerPluginType = self
---  if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
-
---  local camera = Utils:GetCamera()
---  local step: number = self._nudgeStep
---  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
---    step = step * 0.2  -- fine mode
---  end
-
---  local cf: CFrame = camera.CFrame
---  -- Local axes of the camera
---  local right: Vector3 = cf.RightVector
---  local up: Vector3 = cf.UpVector
---  -- Flat forward (ignore tilt) so W/S don't just dive into the ground
---  local forward: Vector3 = Vector3.new(cf.LookVector.X, 0, cf.LookVector.Z)
---  if forward.Magnitude < 0.001 then forward = cf.LookVector end
---  forward = forward.Unit
-
---  local delta: Vector3 = Vector3.zero
-
---  if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
---    delta = forward * step
---  elseif input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.Down then
---    delta = -forward * step
---  elseif input.KeyCode == Enum.KeyCode.A or input.KeyCode == Enum.KeyCode.Left then
---    delta = -right * step
---  elseif input.KeyCode == Enum.KeyCode.D or input.KeyCode == Enum.KeyCode.Right then
---    delta = right * step
---  elseif input.KeyCode == Enum.KeyCode.E then
---    delta = up * step
---  elseif input.KeyCode == Enum.KeyCode.Q then
---    delta = -up * step
---  else
---    return  -- not a nudge key, do nothing
---  end
-
---  -- Apply nudge
---  self:_moveCameraTo(cf + delta)
---end
-
--- ─────────────────────────────────────────────────────────────
--- NEW: Slower camera with mouse for fine positioning.
+-- Slower camera with mouse for fine positioning.
 -- By @Jademaus.
 -- ─────────────────────────────────────────────────────────────
 function ThumbMakerPlugin:_initScaledPan()
@@ -636,16 +577,13 @@ function ThumbMakerPlugin:_makeThumbnail()
   local camera: Camera = Utils:GetCamera():Clone()
   camera.Name = "ThumbnailCamera"
   camera.Parent = self._selected.instance
-  -- save offset as an attribute
-  --camera:SetAttribute("ThumbnailCameraOffset", self:_findPivot(self._selected.instance):ToObjectSpace(camera.CFrame))
-  -- now use new saving method
   self:_saveCameraState(camera)
   self:_updateButtonColors()
 end
 
 function ThumbMakerPlugin:_makeThumbnailAccessory()
   -- for Accessories we use ThumbnailConfiguration since its what Roblox tell UGC creators to use
-  -- https://create.roblox.com/docs/art/marketplace/publishing-to-marketplace#creating-thumbnails
+  -- https://create.roblox.com/docs/marketplace/custom-thumbnails
   local self: ThumbMakerPluginType = self
   self:_deleteCurrentThumbnail()
   if not self._selected.instance then return end
@@ -663,7 +601,6 @@ function ThumbMakerPlugin:_makeThumbnailAccessory()
       offset.Value = _target.CFrame:ToObjectSpace(Utils:GetCamera().CFrame)
     end
     conf.Parent = self._selected.instance
-    --self:_saveCameraState(conf)
     self:_updateButtonColors()
   else
     self:_setWarningText("⚠️ Accessory must have a valid Handle part", 2)
