@@ -83,7 +83,6 @@ export type ThumbMakerPluginType = {
   _onCameraModeChanges: (self: ThumbMakerPluginType) -> (),
 
   _autoFrameModel: (self: ThumbMakerPluginType) -> (),
-  --_handleNudgeInput: (self: ThumbMakerPluginType, input: InputObject) -> (),
   _initScaledPan: (self: ThumbMakerPluginType) -> (),
   
   _saveCameraState: (self: ThumbMakerPluginType, target: Camera | Configuration) -> (),
