@@ -2,43 +2,71 @@
 
 --[[
 
-	ThumbMaker plugin by RenanMSV
+  ThumbMaker plugin by DelzDev (@RenanMSV) - Since July 2023.
+  Improved by @Jademaus: auto-frame, better ortho toggle, nudge controls - April 2026
+
+  A Roblox plugin that helps you make model, accessories, tool thumbnails
+  Made by RenanMsV at xMoon Games Studios.
 
 ]]
 
-local SelectionService = game:GetService("Selection")
 local CoreGui = game:GetService("CoreGui")
+local SelectionService = game:GetService("Selection")
 local UserInputService = game:GetService("UserInputService")
 
-local toolbar = plugin:CreateToolbar("Thumb Maker")
+local Types = require(script.Types)
+local Utils = require(script.Utils)
 
-local isDonatorEdition = script:FindFirstChild("IsDonatorEdition") and script:FindFirstChild("IsDonatorEdition").Value == true
+local ICON_DEFAULT       = "rbxassetid://14034112968"
+local ICON_DEFAULT_DON_E = "rbxassetid://107083275815819"
+local ICON_AI_1          = "rbxassetid://108403669183553"
+local ICON_AI_2          = "rbxassetid://83975823770967"
 
-local openCloseButton = toolbar:CreateButton("Thumb Maker", "Thumb Maker", isDonatorEdition == true and "rbxassetid://107083275815819" or "rbxassetid://14034112968")
+local FOV_DEFAULT        = 70
+local FOV_ORTHO          = 5
 
+local ATTR_FLAG          = "ThumbMakerSave"
+local ATTR_SVVERSION     = "SaveFormat"
+local ATTR_IS_ORTHO      = "CamIsOrthoMode"
+local ATTR_FOV           = "CamFOV"
+local ATTR_PERSP_FOV     = "CamPerspFOV"
+local ATTR_ORTHO_DIST    = "CamOrthoDistance"
+local ATTR_DIR_X         = "CamDirX"
+local ATTR_DIR_Y         = "CamDirY"
+local ATTR_DIR_Z         = "CamDirZ"
+local ATTR_UP_X          = "CamUpX"
+local ATTR_UP_Y          = "CamUpY"
+local ATTR_UP_Z          = "CamUpZ"
+local ATTR_DIST          = "CamDistance"
+local ATTR_LOOK_X        = "CamLookX"
+local ATTR_LOOK_Y        = "CamLookY"
+local ATTR_LOOK_Z        = "CamLookZ"
+
+local toolbar = plugin:CreateToolbar("ThumbMaker")
+
+local openCloseButton = toolbar:CreateButton(
+  "ThumbMaker",
+  "Make thumbnails for your UGC and models!",
+  ICON_DEFAULT
+)
 openCloseButton.ClickableWhenViewportHidden = true
 
-local ThumbMakerTypes = require(script.Types)
-local Utils = require(script.Utils)
+type ThumbMakerPluginType = Types.ThumbMakerPluginType
 
 local ThumbMakerPlugin = {}
 ThumbMakerPlugin.__index = ThumbMakerPlugin
 
-function ThumbMakerPlugin.new(gui: ScreenGui)
-  --[[
-    A Roblox plugin that helps you make model, accessories, tool thumbnails
-    Made by RenanMsV at xMoon Games Studios
-  ]]
-  local self = setmetatable({}, ThumbMakerPlugin)
-  self._version = "ver. 1.0.3" :: string
-  self._pluginInitialized = false :: boolean
+function ThumbMakerPlugin.new(gui: ScreenGui): ThumbMakerPluginType
+  local instance = setmetatable({} :: ThumbMakerPluginType, ThumbMakerPlugin)
+  instance._version = "ver. 1.1.0"
+  instance._pluginInitialized = false
 
-  self._selected = {
+  instance._selected = {
     instance = nil,
     moveRBXConnection = nil,
-  } :: ThumbMakerTypes._selectedTable
+  }
 
-  self._allowedClasses = {
+  instance._allowedClasses = {
     ["Model"] = true,
     ["Folder"] = true,
     ["Configuration"] = true,
@@ -48,58 +76,78 @@ function ThumbMakerPlugin.new(gui: ScreenGui)
     ["SpawnLocation"] = true,
   }
 
+  -- Nudge state
+  instance._nudgeConnection = nil :: RBXScriptConnection?
+  instance._nudgeStep = 0.5 :: number -- studs per nudge
+
   local frame: Frame = gui:FindFirstChild("Frame") :: Frame
 
-  self._gui = {
+  local Get = function(...) return Utils:GetFromPath(...) end
+
+  instance._gui = {
     ScreenGui = gui :: ScreenGui,
     Frame = frame :: Frame,
     Props = {
-      StartingFOV = (workspace.CurrentCamera.FieldOfView or 70),
+      StartingFOV = (Utils:GetCamera().FieldOfView or FOV_DEFAULT),
       OriginalDeleteButtonColor = Color3.fromRGB(0, 0, 0),
       OriginalResetCameraOffsetButtonColor = Color3.fromRGB(0, 0, 0),
       FOVHandleDragging = false,
-      ResettingCameraOffset = false,
+      IsOrthoMode = false,
+      OrthoDistance = 20, -- Stores the camera distance used for ortho so switching back is seamless
+      PerspectiveFOV = FOV_DEFAULT,
+      WarningRevertThread = nil,
     },
+
     Credits = {
-      Version = frame:FindFirstChild("Credits"):FindFirstChild("Version") :: TextLabel,
+      Version = Get(Get(frame, "Credits"), "Version") :: TextLabel,
     },
+
     FavoriteStarButton = {
-      Button = frame:FindFirstChild("Tutorial"):FindFirstChild("StarButton"):FindFirstChild("Favorite") :: ImageButton,
-      CloseButton = frame:FindFirstChild("Tutorial"):FindFirstChild("StarButton"):FindFirstChild("Infobox"):FindFirstChild("Quit") :: TextButton,
-      InfoBox = frame:FindFirstChild("Tutorial"):FindFirstChild("StarButton"):FindFirstChild("Infobox") :: Frame,
+      Button = Get(Get(Get(frame, "Tutorial"), "StarButton"), "Favorite") :: ImageButton,
+      CloseButton = Get(Get(Get(Get(frame, "Tutorial"), "StarButton"), "Infobox"), "Quit") :: TextButton,
+      InfoBox = Get(Get(Get(frame, "Tutorial"), "StarButton"), "Infobox") :: Frame,
     },
+
     ChangelogButton = {
-      Button = frame:FindFirstChild("Tutorial"):FindFirstChild("ChangelogButton"):FindFirstChild("Changelog") :: ImageButton,
-      CloseButton = frame:FindFirstChild("Tutorial"):FindFirstChild("ChangelogButton"):FindFirstChild("Infobox"):FindFirstChild("Quit") :: TextButton,
-      InfoBox = frame:FindFirstChild("Tutorial"):FindFirstChild("ChangelogButton"):FindFirstChild("Infobox") :: Frame,
+      Button = Get(Get(Get(frame, "Tutorial"), "ChangelogButton"), "Changelog") :: ImageButton,
+      CloseButton = Get(Get(Get(Get(frame, "Tutorial"), "ChangelogButton"), "Infobox"), "Quit") :: TextButton,
+      InfoBox = Get(Get(Get(frame, "Tutorial"), "ChangelogButton"), "Infobox") :: Frame,
     },
+
     Labels = {
-      Offset = frame:FindFirstChild("Offset-Control"):FindFirstChild("OffsetValue") :: TextLabel,
-      FOV = frame:FindFirstChild("FOV-Control"):FindFirstChild("FOVValue") :: TextLabel,
-      WarningLabel = frame:FindFirstChild("Tutorial"):FindFirstChild("WarningLabel") :: TextLabel,
+      Offset = Get(Get(frame, "Offset-Control"), "OffsetValue") :: TextLabel,
+      FOV = Get(Get(frame, "FOV-Control"), "FOVValue") :: TextLabel,
+      UGCFOVInfo = Get(Get(frame, "Tutorial"), "UGCFOVInfo") :: TextLabel,
+      WarningLabel = Get(Get(frame, "Tutorial"), "WarningLabel") :: TextLabel,
+      CameraMode = Get(Get(frame, "Main-Viewport"), "CameraMode") :: TextLabel,
     },
+
     Buttons = {
-      Quit = frame:FindFirstChild("Button-Group"):FindFirstChild("Quit") :: TextButton,
-      Delete = frame:FindFirstChild("Button-Group"):FindFirstChild("Delete") :: TextButton,
-      Make = frame:FindFirstChild("Button-Group"):FindFirstChild("Make") :: TextButton,
-      ResetOffset = frame:FindFirstChild("Offset-Control"):FindFirstChild("OffsetReset") :: ImageButton,
+      Quit = Get(Get(frame, "Button-Group"), "Quit") :: TextButton,
+      Delete = Get(Get(frame, "Button-Group"), "Delete") :: TextButton,
+      Make = Get(Get(frame, "Button-Group"), "Make") :: TextButton,
+      CameraMode = Get(Get(frame, "Button-Group"), "CameraMode") :: TextButton,
+      AutoFrame = Get(Get(frame, "Offset-Control"), "AutoFrame") :: ImageButton,
+      ResetOffset = Get(Get(frame, "Offset-Control"), "OffsetReset") :: ImageButton,
     },
+
     Sliders = {
       FOV = {
-        Frame = frame:FindFirstChild("FOV-Control") :: Frame,
-        Bar = frame:FindFirstChild("FOV-Control"):FindFirstChild("Bar") :: Frame,
-        Handle = frame:FindFirstChild("FOV-Control"):FindFirstChild("Bar"):FindFirstChild("Handle") :: TextButton,
+        Frame = Get(frame, "FOV-Control") :: Frame,
+        Bar = Get(Get(frame, "FOV-Control"), "Bar") :: Frame,
+        Handle = Get(Get(Get(frame, "FOV-Control"), "Bar"), "Handle") :: TextButton,
       },
     },
-    Viewports = {
-      MainViewport = frame:FindFirstChild("Main-Viewport"):FindFirstChild("ViewportFrame") :: ViewportFrame,
-      PreviewLightMode = frame:FindFirstChild("Preview-Viewport-Light"):FindFirstChild("ViewportFrame") :: ViewportFrame,
-      PreviewDarkMode = frame:FindFirstChild("Preview-Viewport-Dark"):FindFirstChild("ViewportFrame") :: ViewportFrame,
-    }
-  } :: ThumbMakerTypes._guiTable
 
-  self:_init()
-  return self
+    Viewports = {
+      MainViewport = Get(Get(frame, "Main-Viewport"), "ViewportFrame") :: ViewportFrame,
+      PreviewLightMode = Get(Get(frame, "Preview-Viewport-Light"), "ViewportFrame") :: ViewportFrame,
+      PreviewDarkMode = Get(Get(frame, "Preview-Viewport-Dark"), "ViewportFrame") :: ViewportFrame,
+    }
+  }
+
+  instance:_init()
+  return instance
 end
 
 function ThumbMakerPlugin:_init()
@@ -109,7 +157,9 @@ function ThumbMakerPlugin:_init()
 end
 
 function ThumbMakerPlugin:_initGui()
+  local self: ThumbMakerPluginType = self
 
+  local camera = Utils:GetCamera()
   script.Parent:FindFirstChild("Grid"):Clone().Parent = self._gui.Viewports.MainViewport
 
   self._gui.Credits.Version.Text = self._version
@@ -131,6 +181,17 @@ function ThumbMakerPlugin:_initGui()
   self._gui.Buttons.Delete.MouseButton1Click:Connect(function()
     self:_deleteCurrentThumbnail()
   end)
+
+  -- Perspective / Orthographic toggle
+  self._gui.Buttons.CameraMode.MouseButton1Click:Connect(function()
+    self:_togglePerspective()
+  end)
+
+  -- Auto-frame button: tries to fit the model into view perfectly
+  self._gui.Buttons.AutoFrame.MouseButton1Click:Connect(function()
+    self:_autoFrameModel()
+  end)
+
   self._gui.Props.OriginalDeleteButtonColor = self._gui.Buttons.Delete.BackgroundColor3
   self._gui.Props.OriginalResetCameraOffsetButtonColor = self._gui.Buttons.ResetOffset.BackgroundColor3
 
@@ -161,15 +222,25 @@ function ThumbMakerPlugin:_initGui()
     self:_FOVSliderCalculatePosition(input)
   end)
 
-  workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Connect(function()
+  -- Nudge camera with arrow keys / WASD when plugin is open
+  --self._nudgeConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+  --  if gameProcessed then return end
+  --  if not self._gui.ScreenGui.Enabled then return end
+  --  if not self._selected.instance then return end
+  --  self:_handleNudgeInput(input)
+  --end)
+
+  self:_initScaledPan()
+
+  camera:GetPropertyChangedSignal("CFrame"):Connect(function()
     if not self._gui.ScreenGui.Enabled then return end
     if not self._selected.instance then return end
-    local offset: CFrame = self:_findPivot(self._selected.instance):ToObjectSpace(workspace.CurrentCamera.CFrame)
+    local offset: CFrame = self:_findPivot(self._selected.instance):ToObjectSpace(camera.CFrame)
     self._gui.Labels.Offset.Text = ("%.1f,%.1f,%.1f"):format(offset.Position.X, offset.Position.Y, offset.Position.Z)
   end)
 
-  workspace.CurrentCamera:GetPropertyChangedSignal("FieldOfView"):Connect(function()
-    self:_FOVSliderSetPosition(workspace.CurrentCamera.FieldOfView)
+  camera:GetPropertyChangedSignal("FieldOfView"):Connect(function()
+    self:_FOVSliderSetPosition(camera.FieldOfView)
   end)
 
   self._gui.Buttons.ResetOffset.MouseButton1Click:Connect(function()
@@ -183,34 +254,280 @@ function ThumbMakerPlugin:_initGui()
     self._gui.ChangelogButton.InfoBox.Visible = false
   end)
 
-  if not isDonatorEdition then
-    self._gui.FavoriteStarButton.Button.MouseButton1Click:Connect(function ()
-      self._gui.FavoriteStarButton.InfoBox.Visible = not self._gui.FavoriteStarButton.InfoBox.Visible
-    end)
-    self._gui.FavoriteStarButton.CloseButton.MouseButton1Click:Connect(function ()
-      self._gui.FavoriteStarButton.InfoBox.Visible = false
-    end)
+  self._gui.FavoriteStarButton.Button.MouseButton1Click:Connect(function ()
+    self._gui.FavoriteStarButton.InfoBox.Visible = not self._gui.FavoriteStarButton.InfoBox.Visible
+  end)
+  self._gui.FavoriteStarButton.CloseButton.MouseButton1Click:Connect(function ()
+    self._gui.FavoriteStarButton.InfoBox.Visible = false
+  end)
+end
+
+-- ─────────────────────────────────────────────────────────────
+-- IMPROVED: Toggle between Perspective and Orthographic.
+-- When switching to Ortho, the camera is moved back so the model
+-- stays the same apparent size. When switching back, it returns
+-- to the natural distance.
+-- By @Jademaus.
+-- ─────────────────────────────────────────────────────────────
+function ThumbMakerPlugin:_togglePerspective()
+  local self: ThumbMakerPluginType = self
+  local camera = Utils:GetCamera()
+  local isCurrentlyOrtho = self._gui.Props.IsOrthoMode
+
+  if not self._selected.instance then
+    if isCurrentlyOrtho then
+      self:_forcePerspective(self._gui.Props.PerspectiveFOV or FOV_DEFAULT)
+    end
+    return
   end
 
+  if isCurrentlyOrtho then
+    local pivot: CFrame = self:_findPivot(self._selected.instance)
+    local currentDir: Vector3 = (camera.CFrame.Position - pivot.Position).Unit
+    local targetFOV: number = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
+
+    self:_moveCameraTo(CFrame.new(pivot.Position + currentDir * self._gui.Props.OrthoDistance, pivot.Position))
+    camera.FieldOfView = targetFOV
+    self:_FOVSliderSetPosition(targetFOV)
+    self._gui.Props.IsOrthoMode = false
+    self._gui.Labels.CameraMode.Text = "📸 PERSPECTIVE"
+    self:_FOVSliderSetEnabled(true)
+  else
+    local pivot: CFrame = self:_findPivot(self._selected.instance)
+    local currentDist: number = (camera.CFrame.Position - pivot.Position).Magnitude
+
+    -- Save both the distance and the current perspective FOV before entering ortho
+    self._gui.Props.OrthoDistance = currentDist
+    self._gui.Props.PerspectiveFOV = camera.FieldOfView
+
+    local oldFOV: number = camera.FieldOfView
+    local newFOV: number = FOV_ORTHO
+    local ratio: number = math.tan(math.rad(oldFOV / 2)) / math.tan(math.rad(newFOV / 2))
+    local newDist: number = currentDist * ratio
+
+    local currentDir: Vector3 = (camera.CFrame.Position - pivot.Position).Unit
+    self:_moveCameraTo(CFrame.new(pivot.Position + currentDir * newDist, pivot.Position))
+    camera.FieldOfView = newFOV
+    self:_FOVSliderSetPosition(newFOV)
+    self._gui.Props.IsOrthoMode = true
+    self._gui.Labels.CameraMode.Text = "📸 ORTHOGRAPHIC"
+  end
+  self:_onCameraModeChanges()
+end
+
+-- forces the camera mode to be orthographic
+function ThumbMakerPlugin:_forceOrtho(fov: number?)
+  local camera = Utils:GetCamera()
+  self._gui.Props.IsOrthoMode        = true
+  camera.FieldOfView                 = fov or FOV_ORTHO
+  self._gui.Labels.CameraMode.Text   = "📸 ORTHOGRAPHIC"
+  self:_FOVSliderSetPosition(fov or FOV_ORTHO)
+  self:_onCameraModeChanges()
+end
+
+-- forces the camera mode to be perspective
+function ThumbMakerPlugin:_forcePerspective(fov: number?)
+  local camera = Utils:GetCamera()
+  local resolvedFOV = fov or FOV_DEFAULT
+  self._gui.Props.IsOrthoMode        = false
+  self._gui.Props.PerspectiveFOV     = resolvedFOV  -- keep it in sync
+  camera.FieldOfView                 = resolvedFOV
+  self._gui.Labels.CameraMode.Text   = "📸 PERSPECTIVE"
+  self:_FOVSliderSetPosition(resolvedFOV)
+  self:_onCameraModeChanges()
+end
+
+-- Callback that runs after the camera mode changes
+function ThumbMakerPlugin:_onCameraModeChanges()
+  -- enables/disables the UGC fov warning
+  local instance: Instance? = self._selected.instance
+  self._gui.Labels.UGCFOVInfo.Visible = instance and instance:IsA("Accessory") and self._gui.Props.IsOrthoMode
+end
+
+-- ─────────────────────────────────────────────────────────────
+-- NEW: Auto-frame — fits the model's bounding sphere into view
+-- with a small padding, preserving the current camera angle.
+-- By @Jademaus.
+-- ─────────────────────────────────────────────────────────────
+function ThumbMakerPlugin:_autoFrameModel()
+  local self: ThumbMakerPluginType = self
+  if not self._selected.instance then return end
+
+  local instance = self._selected.instance
+  local pivot: CFrame = self:_findPivot(instance)
+  local camera = Utils:GetCamera()
+
+  local radius: number = 5
+  if instance:IsA("Model") then
+    local extents: Vector3 = instance:GetExtentsSize()
+    radius = extents.Magnitude / 2
+  elseif instance:IsA("BasePart") then
+    local magnitude: number = instance.Size.Magnitude
+    radius = magnitude / 2
+  elseif instance:IsA("Accessory") then
+    local handle: BasePart? = instance:FindFirstChild("Handle") :: BasePart?
+    if not handle then
+      self:_setWarningText("⚠️ Accessory must have a valid Handle part", 2)
+      return
+    end
+    radius = handle.Size.Magnitude / 2
+  else
+    local model: Model = Instance.new("Model")
+    local clone = instance:Clone()
+    clone.Parent = model
+    radius = model:GetExtentsSize().Magnitude / 2
+    model:Destroy()
+  end
+
+  radius = radius * 1.15
+
+  local fov: number = camera.FieldOfView
+  local distance: number = radius / math.tan(math.rad(fov / 2))
+
+  local currentDir: Vector3 = (camera.CFrame.Position - pivot.Position)
+  if currentDir.Magnitude < 0.001 then
+    currentDir = Vector3.new(0, 0.5, 1).Unit
+  else
+    currentDir = currentDir.Unit
+  end
+
+  self:_moveCameraTo(CFrame.new(pivot.Position + currentDir * distance, pivot.Position))
+  self:_setWarningText("Camera was moved to fit the model", 2)
+
+  if self._gui.Props.IsOrthoMode then
+    -- Back-convert the autoframe distance to its perspective equivalent
+    -- so that toggling back to perspective lands at the right apparent size.
+    -- perspDist * tan(perspFOV/2) = orthoDist * tan(orthoFOV/2)
+    local orthoFOV: number = fov
+    local perspFOV: number = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
+    local ratio: number = math.tan(math.rad(orthoFOV / 2)) / math.tan(math.rad(perspFOV / 2))
+    self._gui.Props.OrthoDistance = distance * ratio
+  else
+    self._gui.Props.OrthoDistance = distance
+    self._gui.Props.PerspectiveFOV = fov
+  end
+end
+
+-- ─────────────────────────────────────────────────────────────
+-- NEW: Nudge camera with keyboard for fine positioning.
+-- Arrow keys / WASD move the camera relative to its own local axes.
+-- Q/E move up/down.  Shift halves the step for micro-adjustments.
+-- By @Jademaus.
+-- ─────────────────────────────────────────────────────────────
+--function ThumbMakerPlugin:_handleNudgeInput(input: InputObject)
+--  local self: ThumbMakerPluginType = self
+--  if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+
+--  local camera = Utils:GetCamera()
+--  local step: number = self._nudgeStep
+--  if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
+--    step = step * 0.2  -- fine mode
+--  end
+
+--  local cf: CFrame = camera.CFrame
+--  -- Local axes of the camera
+--  local right: Vector3 = cf.RightVector
+--  local up: Vector3 = cf.UpVector
+--  -- Flat forward (ignore tilt) so W/S don't just dive into the ground
+--  local forward: Vector3 = Vector3.new(cf.LookVector.X, 0, cf.LookVector.Z)
+--  if forward.Magnitude < 0.001 then forward = cf.LookVector end
+--  forward = forward.Unit
+
+--  local delta: Vector3 = Vector3.zero
+
+--  if input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.Up then
+--    delta = forward * step
+--  elseif input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.Down then
+--    delta = -forward * step
+--  elseif input.KeyCode == Enum.KeyCode.A or input.KeyCode == Enum.KeyCode.Left then
+--    delta = -right * step
+--  elseif input.KeyCode == Enum.KeyCode.D or input.KeyCode == Enum.KeyCode.Right then
+--    delta = right * step
+--  elseif input.KeyCode == Enum.KeyCode.E then
+--    delta = up * step
+--  elseif input.KeyCode == Enum.KeyCode.Q then
+--    delta = -up * step
+--  else
+--    return  -- not a nudge key, do nothing
+--  end
+
+--  -- Apply nudge
+--  self:_moveCameraTo(cf + delta)
+--end
+
+-- ─────────────────────────────────────────────────────────────
+-- NEW: Slower camera with mouse for fine positioning.
+-- By @Jademaus.
+-- ─────────────────────────────────────────────────────────────
+function ThumbMakerPlugin:_initScaledPan()
+  local REFERENCE_FOV  = FOV_DEFAULT
+  local rmbHeld        = false
+
+  UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.MouseButton2 then return end
+    if not self._gui.ScreenGui.Enabled then return end
+    if not self._selected.instance then return end
+    local camera = Utils:GetCamera()
+    if camera.FieldOfView >= 30 then return end
+
+    rmbHeld = true
+    camera.CameraType = Enum.CameraType.Scriptable
+  end)
+
+  UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.MouseButton2 then return end
+    if not rmbHeld then return end
+
+    rmbHeld = false
+    local camera = Utils:GetCamera()
+    camera.CameraType = Enum.CameraType.Fixed
+  end)
+
+  UserInputService.InputChanged:Connect(function(input)
+    if not rmbHeld then return end
+    if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+
+    local camera = Utils:GetCamera()
+    local fov   = camera.FieldOfView
+    local scale = fov / REFERENCE_FOV
+    local delta = input.Delta * 0.5
+    local shiftHeld = UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)
+
+    if shiftHeld then
+      delta = delta * 0.2
+    end
+
+    local cf = camera.CFrame
+    camera.CFrame = cf
+      * CFrame.Angles(0, -math.rad(delta.X) * scale, 0)
+      * CFrame.Angles(-math.rad(delta.Y) * scale, 0, 0)
+  end)
 end
 
 function ThumbMakerPlugin:_guiOpen()
+  local camera = Utils:GetCamera()
+  self:_forcePerspective()
   self._gui.ScreenGui.Parent = CoreGui
   self._gui.ScreenGui.Enabled = true
-  self._gui.Props.StartingFOV = workspace.CurrentCamera.FieldOfView or 70
-  if self:_getSelectedModel() then -- when opening the gui, if you have something select it selects that
+  self._gui.Props.StartingFOV = camera.FieldOfView or FOV_DEFAULT
+  self._gui.Props.IsOrthoMode = false
+  if self:_getSelectedModel() then -- when opening the gui, if you have something selected it selects that
     self:_onSelectionChanges()
   end
 end
 
 function ThumbMakerPlugin:_guiClose()
+  local camera = Utils:GetCamera()
+  self:_forcePerspective()
   self._gui.ScreenGui.Parent = script.Parent
   self._gui.ScreenGui.Enabled = false
   self:_deselectCurrentlySelected()
-  workspace.CurrentCamera.FieldOfView = self._gui.Props.StartingFOV
+  camera.FieldOfView = self._gui.Props.StartingFOV
+  self._gui.Props.IsOrthoMode = false
 end
 
 function ThumbMakerPlugin:_selectInstance(instance: Instance)
+  local self = self :: ThumbMakerPluginType
   if instance.ClassName == "Terrain" or instance.ClassName == "Workspace" or not self:_isClassAllowed(instance) then
     self:_setWarningText("Wrong selection or nothing selected")
     return false
@@ -222,30 +539,22 @@ function ThumbMakerPlugin:_selectInstance(instance: Instance)
   self:_updateGridPosition()
   self:_setupMoveEvent()
   self:_updateButtonColors()
-  if instance:IsA("Accessory") then
-    pcall(function()
-      workspace.CurrentCamera.FieldOfView = 70
-      self:_FOVSliderSetPosition(70)
-      self:_FOVSliderSetEnabled(false)
-    end)
-  else
-    self:_FOVSliderSetEnabled(true)
-    pcall(function()
-      local thumbnailCamera: Camera = self._selected.instance:FindFirstChild("ThumbnailCamera") :: Camera
-      workspace.CurrentCamera.FieldOfView = thumbnailCamera.FieldOfView
-      self:_FOVSliderSetPosition(thumbnailCamera.FieldOfView)
-    end)
-  end
+
+  self._gui.Labels.UGCFOVInfo.Visible = instance:IsA("Accessory") and self._gui.Props.IsOrthoMode
+
+  self:_FOVSliderSetEnabled(true)
+
   return true
 end
 
 function ThumbMakerPlugin:_onSelectionChanges()
   if not self._gui.ScreenGui.Enabled then return end
   local selected: Instance? = self:_getSelectedModel()
+  local instance: Instance? = self._selected.instance
   if not selected then
     self:_deselectCurrentlySelected()
   end
-  if selected and selected ~= self._selected.instance and self:_isClassAllowed(selected) then
+  if selected and selected ~= instance and self:_isClassAllowed(selected) then
     self:_deselectCurrentlySelected()
     self:_selectInstance(selected)
     return
@@ -257,8 +566,9 @@ end
 
 function ThumbMakerPlugin:_deselectCurrentlySelected()
   self:_destroyViewportsClone()
-  if self._selected.moveRBXConnection then
-    self._selected.moveRBXConnection:Disconnect()
+  local connection: RBXScriptConnection? = self._selected.moveRBXConnection
+  if connection then
+    connection:Disconnect()
   end
   self._selected.moveRBXConnection = nil
   self._selected.instance = nil
@@ -288,40 +598,59 @@ function ThumbMakerPlugin:_updateViewportsClone(instance: Instance)
 end
 
 function ThumbMakerPlugin:_destroyViewportsClone()
-  pcall(function() self._gui.Viewports.MainViewport:FindFirstChild("ClonedInstance"):Destroy() end)
-  pcall(function() self._gui.Viewports.PreviewLightMode:FindFirstChild("ClonedInstance"):Destroy() end)
-  pcall(function() self._gui.Viewports.PreviewDarkMode:FindFirstChild("ClonedInstance"):Destroy() end)
+  pcall(function()
+    local d = self._gui.Viewports.MainViewport:FindFirstChild("ClonedInstance")
+    if d then
+      d:Destroy()
+    end
+  end)
+  pcall(function()
+    local d = self._gui.Viewports.PreviewLightMode:FindFirstChild("ClonedInstance")
+    if d then
+      d:Destroy()
+    end
+  end)
+  pcall(function()
+    local d = self._gui.Viewports.PreviewDarkMode:FindFirstChild("ClonedInstance")
+    if d then
+      d:Destroy()
+    end
+  end)
 end
 
 function ThumbMakerPlugin:_isClassAllowed(instance: Instance)
+  local self = self :: ThumbMakerPluginType
   if not instance["ClassName"] then return false end
   local allowed: boolean = false
   for name: string, allow: boolean in pairs(self._allowedClasses) do
-    if (instance:IsA(name) or instance.ClassName == name) and allow == true then allowed = true break end
+    if (instance:IsA(name) or instance.ClassName == name) and allow == true then allowed = true; break end
   end
   return allowed
 end
 
 function ThumbMakerPlugin:_makeThumbnail()
+  local self = self :: ThumbMakerPluginType
   if not self._selected.instance then return end
-  if self._selected.instance:IsA("Accessory") then self:_makeThumbnailAccessory() return end
+  if self._selected.instance:IsA("Accessory") then self:_makeThumbnailAccessory(); return end
   self:_deleteCurrentThumbnail()
-  local camera: Camera = workspace.CurrentCamera:Clone()
+  local camera: Camera = Utils:GetCamera():Clone()
   camera.Name = "ThumbnailCamera"
   camera.Parent = self._selected.instance
   -- save offset as an attribute
-  camera:SetAttribute("ThumbnailCameraOffset", self:_findPivot(self._selected.instance):ToObjectSpace(camera.CFrame))
+  --camera:SetAttribute("ThumbnailCameraOffset", self:_findPivot(self._selected.instance):ToObjectSpace(camera.CFrame))
+  -- now use new saving method
+  self:_saveCameraState(camera)
   self:_updateButtonColors()
 end
 
-function  ThumbMakerPlugin:_makeThumbnailAccessory()
+function ThumbMakerPlugin:_makeThumbnailAccessory()
   -- for Accessories we use ThumbnailConfiguration since its what Roblox tell UGC creators to use
   -- https://create.roblox.com/docs/art/marketplace/publishing-to-marketplace#creating-thumbnails
-  -- Requires FOV to be always 70.
+  local self: ThumbMakerPluginType = self
   self:_deleteCurrentThumbnail()
   if not self._selected.instance then return end
   local handle: BasePart = self._selected.instance:FindFirstChild("Handle") :: BasePart
-	if handle and handle:IsA("BasePart") then
+  if handle and handle:IsA("BasePart") then
     local conf: Configuration = Instance.new("Configuration")
     conf.Name = "ThumbnailConfiguration"
     local target: ObjectValue = Instance.new("ObjectValue", conf)
@@ -331,12 +660,13 @@ function  ThumbMakerPlugin:_makeThumbnailAccessory()
     offset.Name = "ThumbnailCameraValue"
     if conf and target and offset then
       local _target: BasePart = target.Value :: BasePart
-      offset.Value = _target.CFrame:ToObjectSpace(workspace.CurrentCamera.CFrame)
+      offset.Value = _target.CFrame:ToObjectSpace(Utils:GetCamera().CFrame)
     end
     conf.Parent = self._selected.instance
+    --self:_saveCameraState(conf)
     self:_updateButtonColors()
   else
-    warn("Must select a valid accessory with a valid Handle")
+    self:_setWarningText("⚠️ Accessory must have a valid Handle part", 2)
   end
 end
 
@@ -347,10 +677,10 @@ function ThumbMakerPlugin:_updateThumbnail()
   local currentThumbnailCamera: Camera? = selectedInstance:FindFirstChild("ThumbnailCamera") :: Camera
   if not currentThumbnailCamera then return end
 
-  local oldOffset: CFrame = currentThumbnailCamera:GetAttribute("ThumbnailCameraOffset")
+  local oldOffset: CFrame = currentThumbnailCamera:GetAttribute("ThumbnailCameraOffset") :: CFrame
   self:_deleteCurrentThumbnail()
 
-  local camera: Camera = workspace.CurrentCamera:Clone()
+  local camera = Utils:GetCamera():Clone()
   camera.Name = "ThumbnailCamera"
   camera.Parent = self._selected.instance
 
@@ -365,12 +695,14 @@ end
 function ThumbMakerPlugin:_deleteCurrentThumbnail()
   pcall(function()
     if not self._selected.instance then return end
-    self._selected.instance:FindFirstChild("ThumbnailCamera"):Destroy()
+    local existing = self._selected.instance:FindFirstChild("ThumbnailCamera")
+    if existing then existing:Destroy() end
     self:_updateButtonColors()
   end)
   pcall(function()
     if not self._selected.instance then return end
-    self._selected.instance:FindFirstChild("ThumbnailConfiguration"):Destroy()
+    local existing = self._selected.instance:FindFirstChild("ThumbnailConfiguration")
+    if existing then existing:Destroy() end
     self:_updateButtonColors()
   end)
 end
@@ -396,7 +728,7 @@ function ThumbMakerPlugin:_updateButtonColors()
   end
 end
 
-function ThumbMakerPlugin:_findPivot(instance: Instance)
+function ThumbMakerPlugin:_findPivot(instance: Instance): CFrame
   if not instance then return CFrame.new() end
   if instance:IsA("Accessory") then
     local handle: BasePart = instance:FindFirstChild("Handle") :: BasePart
@@ -405,58 +737,36 @@ function ThumbMakerPlugin:_findPivot(instance: Instance)
   end
 
   if instance:IsA("BasePart") or instance:IsA("Model") then
-    local pivt: CFrame = (instance :: BasePart | Model):GetPivot()
-    return pivt
+    return (instance :: BasePart | Model):GetPivot()
   end
 
   if instance:IsA("Folder") or instance:IsA("Configuration") then
     -- group, get pivot, ungroup
     local model: Model = Instance.new("Model")
-    local cloneFolder: Folder? = nil
-    local cloneConfiguration: Configuration? = nil
-
-    if instance:IsA("Folder") then
-      cloneFolder = instance:Clone()
-    elseif instance:IsA("Configuration") then
-      cloneConfiguration = instance:Clone()
-    end
-
-    if cloneFolder then
-      cloneFolder.Parent = model
-    end
-    if cloneConfiguration then
-      cloneConfiguration.Parent = model
-    end
-
+    local clone: Instance = instance:Clone()
+    clone.Parent = model
     local pivt: CFrame = model:GetPivot()
     model:Destroy()
     return pivt
   end
-
   -- in case nothing returns a default cframe
   return CFrame.new()
 end
 
 function ThumbMakerPlugin:_resetCameraOffset()
+  local self: ThumbMakerPluginType = self
   pcall(function()
     if not self._selected.instance then return end
-    if self._selected.instance:IsA("Accessory") then self:_resetCameraOffsetAccessory() return end
+    if self._selected.instance:IsA("Accessory") then self:_resetCameraOffsetAccessory(); return end
+    local camera = Utils:GetCamera()
     local thumbnailCamera: Camera = self._selected.instance:FindFirstChild("ThumbnailCamera") :: Camera
-    local offset: CFrame = thumbnailCamera:GetAttribute("ThumbnailCameraOffset")
-    if offset then
-      -- load offset that was set as attribute
-      self:_moveCameraTo(self:_findPivot(self._selected.instance) * offset)
-    else
-      workspace.CurrentCamera.CFrame = thumbnailCamera.CFrame
-    end
-    pcall(function()
-      workspace.CurrentCamera.FieldOfView = thumbnailCamera.FieldOfView
-      self:_FOVSliderSetPosition(thumbnailCamera.FieldOfView)
-    end)
+    self:_loadCameraState(thumbnailCamera)
+    self:_setWarningText("Restored camera offset to a saved state", 2)
   end)
 end
 
 function ThumbMakerPlugin:_resetCameraOffsetAccessory()
+  local self: ThumbMakerPluginType = self
   pcall(function()
     if not self._selected.instance then return end
     local thumbnailConfiguration: Configuration = self._selected.instance:FindFirstChild("ThumbnailConfiguration") :: Configuration
@@ -467,32 +777,22 @@ function ThumbMakerPlugin:_resetCameraOffsetAccessory()
     if not target or not offset or not target.Value or not offset.Value or not target.Value:IsA("BasePart") then return end
 
     local targetValue: BasePart = target.Value :: BasePart
-    local targetCFrame: CFrame = targetValue.CFrame
-    local offsetValue: CFrame = offset.Value
-    self:_moveCameraTo((targetCFrame * offsetValue))
-
-    pcall(function()
-      workspace.CurrentCamera.FieldOfView = 70
-      self:_FOVSliderSetPosition(70)
-    end)
+    self:_moveCameraTo((targetValue.CFrame * offset.Value))
+    self:_setWarningText("Restored camera offset to a saved state", 2)
   end)
 end
 
 function ThumbMakerPlugin:_moveCameraTo(cframe: CFrame)
-  task.spawn(function()
-    if self._gui.Props.ResettingCameraOffset then return end
-    self._gui.Props.ResettingCameraOffset = true
-    local cameraType: Enum.CameraType = workspace.CurrentCamera.CameraType
-    workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-    task.wait(0.1)
-    workspace.CurrentCamera.CFrame = cframe
-    task.wait(0.05)
-    workspace.CurrentCamera.CameraType = cameraType
-    self._gui.Props.ResettingCameraOffset = false
-  end)
+  local camera = Utils:GetCamera()
+  local cameraType: Enum.CameraType = camera.CameraType
+  camera.CameraType = Enum.CameraType.Scriptable
+  camera.CFrame = cframe
+  task.wait()
+  camera.CameraType = cameraType ~= Enum.CameraType.Scriptable and cameraType or Enum.CameraType.Fixed
 end
 
 function ThumbMakerPlugin:_setupMoveEvent()
+  if not self._selected.instance then return end
   if self._selected.instance:IsA("Model") then
     self._selected.moveRBXConnection = self._selected.instance:GetPropertyChangedSignal("WorldPivot"):Connect(function()
       self:_updateThumbnail()
@@ -501,32 +801,37 @@ function ThumbMakerPlugin:_setupMoveEvent()
     self._selected.moveRBXConnection = self._selected.instance:GetPropertyChangedSignal("CFrame"):Connect(function()
       self:_updateThumbnail()
     end)
-  elseif self._selected.instance.ClassName == "Accessory" then
-    -- ThumbnailConfiguration does not require a re-calculation
-    return
   end
 end
 
 function ThumbMakerPlugin:_updateGridPosition()
-  if self._selected.instance:IsA("Model") then
-    local pos: Vector3 = self._selected.instance:GetPivot().Position
-    local size: Vector3 = self._selected.instance:GetExtentsSize()
-    self._gui.Viewports.MainViewport:FindFirstChild("Grid").Position = pos - Vector3.new(0, (size.Y / 2) + 0.5, 0)
-  elseif self._selected.instance:IsA("BasePart") then
-    local pos: Vector3 = self._selected.instance.Position
-    local size: Vector3 = self._selected.instance.Size
-    self._gui.Viewports.MainViewport:FindFirstChild("Grid").Position = pos - Vector3.new(0, (size.Y / 2) + 0.5, 0)
+  local self = self :: ThumbMakerPluginType
+  local pos: Vector3, size: Vector3
+  if self._selected.instance and self._selected.instance:IsA("Model") then
+    pos = self._selected.instance:GetPivot().Position
+    size = self._selected.instance:GetExtentsSize()
+  elseif self._selected.instance and self._selected.instance:IsA("BasePart") then
+    pos = self._selected.instance.Position
+    size = self._selected.instance.Size
+  end
+  if pos and size then
+    local grid = self._gui.Viewports.MainViewport:FindFirstChild("Grid") :: Part
+    if grid then
+      grid.Position = pos - Vector3.new(0, (size.Y / 2) + 0.5, 0)
+    end
   end
 end
 
 function ThumbMakerPlugin:_FOVSliderCalculatePosition(input: InputObject)
+  local self: Types.ThumbMakerPluginType = self
   if self._selected.instance and self._selected.instance:IsA("Accessory") then return end
   local absX: number = self._gui.Sliders.FOV.Bar.AbsolutePosition.X
   local absXMax: number = absX + self._gui.Sliders.FOV.Bar.AbsoluteSize.X
   local delta: number = Utils:MapToInterval(input.Position.X, absX, absXMax, 0, 1)
   delta = math.clamp(delta, 0, 1)
   local newFov: number = Utils:MapToInterval(delta, 0, 1, 0, 120)
-  workspace.CurrentCamera.FieldOfView = newFov
+  local camera = Utils:GetCamera()
+  camera.FieldOfView = newFov
   self._gui.Labels.FOV.Text = ("%.0f"):format(newFov)
   self._gui.Sliders.FOV.Handle.Position = UDim2.fromScale(delta, 0.5)
 end
@@ -542,14 +847,128 @@ function ThumbMakerPlugin:_FOVSliderSetEnabled(enabled: boolean)
   self._gui.Sliders.FOV.Frame.Visible = enabled
 end
 
-function ThumbMakerPlugin:_setWarningText(text: string)
-  self._gui.Labels.WarningLabel.Visible = text ~= nil
-  self._gui.Labels.WarningLabel.Text = text or ""
+function ThumbMakerPlugin:_setWarningText(text: string?, revertAfter: number?)
+  local self: ThumbMakerPluginType = self
+  local label: TextLabel = self._gui.Labels.WarningLabel
+
+  -- cancel any pending revert
+  if self._gui.Props.WarningRevertThread then
+    task.cancel(self._gui.Props.WarningRevertThread)
+    self._gui.Props.WarningRevertThread = nil
+  end
+
+  label.Visible = text ~= nil
+  label.Text = text or ""
+
+  -- if no revertAfter, the warning persists until _setWarningText(nil) is called
+  if revertAfter then
+    self._gui.Props.WarningRevertThread = task.delay(revertAfter, function()
+      self._gui.Props.WarningRevertThread = nil
+      label.Visible = false
+      label.Text = ""
+    end)
+  end
+end
+
+function ThumbMakerPlugin:_saveCameraState(target: Camera | Configuration)
+  local self: ThumbMakerPluginType = self
+  local CURRENT_SAVE_VERSION = 1  -- update this when changes to the saver happen
+  local camera = Utils:GetCamera()
+  local isOrtho = self._gui.Props.IsOrthoMode
+  local perspFOV = self._gui.Props.PerspectiveFOV or FOV_DEFAULT
+  local instance: Instance? = self._selected.instance
+  if not instance then return end
+  local pivot: CFrame = self:_findPivot(instance)
+
+  -- Convert camera CFrame into pivot's local space
+  local localCFrame: CFrame = pivot:ToObjectSpace(camera.CFrame)
+  local localPos: Vector3 = localCFrame.Position
+  local localLook: Vector3 = localCFrame.LookVector
+  local localUp: Vector3 = localCFrame.UpVector
+
+  target:SetAttribute(ATTR_FLAG,      true)
+  target:SetAttribute(ATTR_SVVERSION, CURRENT_SAVE_VERSION)
+  target:SetAttribute(ATTR_IS_ORTHO,  isOrtho)
+  target:SetAttribute(ATTR_FOV,       camera.FieldOfView)
+  target:SetAttribute(ATTR_PERSP_FOV, perspFOV)
+  target:SetAttribute(ATTR_DIR_X,     localPos.X)
+  target:SetAttribute(ATTR_DIR_Y,     localPos.Y)
+  target:SetAttribute(ATTR_DIR_Z,     localPos.Z)
+  target:SetAttribute(ATTR_LOOK_X,    localLook.X)
+  target:SetAttribute(ATTR_LOOK_Y,    localLook.Y)
+  target:SetAttribute(ATTR_LOOK_Z,    localLook.Z)
+  target:SetAttribute(ATTR_UP_X,      localUp.X)
+  target:SetAttribute(ATTR_UP_Y,      localUp.Y)
+  target:SetAttribute(ATTR_UP_Z,      localUp.Z)
+
+  if isOrtho then
+    target:SetAttribute(ATTR_ORTHO_DIST, self._gui.Props.OrthoDistance)
+  else
+    target:SetAttribute(ATTR_ORTHO_DIST, nil)
+  end
+end
+
+function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
+  local self: ThumbMakerPluginType = self
+  local instance: Instance? = self._selected.instance
+  if not instance then return end
+  if not target:GetAttribute(ATTR_FLAG) then return end
+  local isOrtho = target:GetAttribute(ATTR_IS_ORTHO)
+  if isOrtho == nil then return end
+  local camera = Utils:GetCamera()
+  local pivot: CFrame = self:_findPivot(instance)
+  -- Reconstruct local CFrame from saved axes
+  local localPos = Vector3.new(
+    target:GetAttribute(ATTR_DIR_X),
+    target:GetAttribute(ATTR_DIR_Y),
+    target:GetAttribute(ATTR_DIR_Z)
+  )
+  local localLook = Vector3.new(
+    target:GetAttribute(ATTR_LOOK_X),
+    target:GetAttribute(ATTR_LOOK_Y),
+    target:GetAttribute(ATTR_LOOK_Z)
+  )
+  local localUp = Vector3.new(
+    target:GetAttribute(ATTR_UP_X),
+    target:GetAttribute(ATTR_UP_Y),
+    target:GetAttribute(ATTR_UP_Z)
+  )
+  -- Reconstruct exact local CFrame then convert back to world space
+  local right: Vector3 = localLook:Cross(localUp).Unit
+  local correctedUp: Vector3 = right:Cross(localLook).Unit
+  local localCFrame = CFrame.fromMatrix(localPos, right, correctedUp, -localLook)
+  local worldCFrame: CFrame = pivot:ToWorldSpace(localCFrame)
+  self:_moveCameraTo(worldCFrame)
+  if isOrtho then
+    local savedOrthoDist = target:GetAttribute(ATTR_ORTHO_DIST)
+    if savedOrthoDist then
+      self._gui.Props.OrthoDistance = savedOrthoDist
+    end
+    self._gui.Props.PerspectiveFOV = target:GetAttribute(ATTR_PERSP_FOV) or FOV_DEFAULT
+    self:_forceOrtho(target:GetAttribute(ATTR_FOV))
+  else
+    local savedFOV = target:GetAttribute(ATTR_FOV)
+    self._gui.Props.PerspectiveFOV = savedFOV
+    self._gui.Props.OrthoDistance  = (worldCFrame.Position - pivot.Position).Magnitude
+    self:_forcePerspective(savedFOV)
+    self:_FOVSliderSetEnabled(true)
+  end
 end
 
 function ThumbMakerPlugin:Destroy()
+  local self = self :: ThumbMakerPluginType
+  if self._gui.Props.IsOrthoMode then
+    self:_togglePerspective()
+  end
+  if self._nudgeConnection then
+    self._nudgeConnection:Disconnect()
+  end
   self._gui.ScreenGui:Destroy()
 end
 
-local myPlugin = ThumbMakerPlugin.new(script.Parent:FindFirstChild(not isDonatorEdition and "ThumbMaker-Gui" or "ThumbMakerDonator-Gui"))
-plugin.Unloading:Connect(function() myPlugin:Destroy() end)
+local pluginGui = script.Parent:FindFirstChild("ThumbMaker-Gui") :: ScreenGui
+local myPlugin = ThumbMakerPlugin.new(pluginGui)
+
+plugin.Unloading:Connect(function ()
+  myPlugin:Destroy()
+end)
