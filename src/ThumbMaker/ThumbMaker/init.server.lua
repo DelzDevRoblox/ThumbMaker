@@ -468,7 +468,7 @@ function ThumbMakerPlugin:_guiClose()
 end
 
 function ThumbMakerPlugin:_selectInstance(instance: Instance)
-  local self = self :: ThumbMakerPluginType
+  local self: ThumbMakerPluginType = self
   if instance.ClassName == "Terrain" or instance.ClassName == "Workspace" or not self:_isClassAllowed(instance) then
     self:_setWarningText("Wrong selection or nothing selected")
     return false
@@ -477,6 +477,7 @@ function ThumbMakerPlugin:_selectInstance(instance: Instance)
   end
   self:_updateViewportsClone(instance)
   self._selected.instance = instance
+
   self:_updateGridPosition()
   self:_setupMoveEvent()
   self:_updateButtonColors()
@@ -607,26 +608,33 @@ function ThumbMakerPlugin:_makeThumbnailAccessory()
   end
 end
 
-function ThumbMakerPlugin:_updateThumbnail()
-  local selectedInstance: Instance? = self._selected.instance
-  if not selectedInstance then return end
+function ThumbMakerPlugin:_updateThumbnail(newCFrame: CFrame)
+  local self: ThumbMakerPluginType = self
+  local selected: Instance? = self._selected.instance
+  if not selected then return end
 
-  local currentThumbnailCamera: Camera? = selectedInstance:FindFirstChild("ThumbnailCamera") :: Camera
+  local currentThumbnailCamera: Camera? = selected:FindFirstChild("ThumbnailCamera") :: Camera
   if not currentThumbnailCamera then return end
 
-  local oldOffset: CFrame = currentThumbnailCamera:GetAttribute("ThumbnailCameraOffset") :: CFrame
-  self:_deleteCurrentThumbnail()
+  local oldCameraOffset: CFrame = currentThumbnailCamera:GetAttribute("ThumbnailCameraOffset") :: CFrame
 
-  local camera = Utils:GetCamera():Clone()
-  camera.Name = "ThumbnailCamera"
-  camera.Parent = self._selected.instance
+  if not oldCameraOffset then
+    -- since thumbnail camera offset was not saved, we need to calculate it.
+    -- somehow in the future, right now its not possible to know where the model was positioned
+    -- when the model was published.
+    -- (maybe if we knew the AssetId and used AssetService but thats a whole other can of worm)
+  else
+    self:_deleteCurrentThumbnail()
+    local camera = Utils:GetCamera():Clone()
+    camera.Name = "ThumbnailCamera"
+    camera.Parent = selected
+    -- save offset as an attribute
+    camera.CFrame = newCFrame * oldCameraOffset
+    camera:SetAttribute("ThumbnailCameraOffset", oldCameraOffset)
+  end
 
-  -- save offset as an attribute
-  local pivot: CFrame = self:_findPivot(self._selected.instance)
-  camera.CFrame = pivot * oldOffset
-  camera:SetAttribute("ThumbnailCameraOffset", oldOffset)
   self:_updateButtonColors()
-  self:_updateViewportsClone(self._selected.instance)
+  self:_updateViewportsClone(selected)
 end
 
 function ThumbMakerPlugin:_deleteCurrentThumbnail()
@@ -704,7 +712,7 @@ function ThumbMakerPlugin:_resetCameraOffsetAccessory()
   local self: ThumbMakerPluginType = self
   local selected: Instance? = self._selected.instance
   if not selected then return end
-  
+
   local thumbnailConfiguration: Configuration = selected:FindFirstChild("ThumbnailConfiguration") :: Configuration
   if not thumbnailConfiguration then return end
 
@@ -730,14 +738,16 @@ function ThumbMakerPlugin:_moveCameraTo(cframe: CFrame)
 end
 
 function ThumbMakerPlugin:_setupMoveEvent()
-  if not self._selected.instance then return end
-  if self._selected.instance:IsA("Model") then
-    self._selected.moveRBXConnection = self._selected.instance:GetPropertyChangedSignal("WorldPivot"):Connect(function()
-      self:_updateThumbnail()
+  local self: ThumbMakerPluginType = self
+  local selected: Instance? = self._selected.instance
+  if not selected then return end
+  if selected:IsA("Model") then
+    self._selected.moveRBXConnection = selected:GetPropertyChangedSignal("WorldPivot"):Connect(function()
+      self:_updateThumbnail(selected.WorldPivot)
     end)
-  elseif self._selected.instance:IsA("BasePart") then
-    self._selected.moveRBXConnection = self._selected.instance:GetPropertyChangedSignal("CFrame"):Connect(function()
-      self:_updateThumbnail()
+  elseif selected:IsA("BasePart") then
+    self._selected.moveRBXConnection = selected:GetPropertyChangedSignal("CFrame"):Connect(function()
+      self:_updateThumbnail(selected.CFrame)
     end)
   end
 end

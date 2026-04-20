@@ -84,7 +84,7 @@ export type ThumbMakerPluginType = {
 
   _autoFrameModel: (self: ThumbMakerPluginType) -> (),
   _initScaledPan: (self: ThumbMakerPluginType) -> (),
-  
+
   _saveCameraState: (self: ThumbMakerPluginType, target: Camera | Configuration) -> (),
   _loadCameraState: (self: ThumbMakerPluginType, target: Camera | Configuration) -> (),
 
@@ -105,7 +105,7 @@ export type ThumbMakerPluginType = {
 
   _makeThumbnail: (self: ThumbMakerPluginType) -> (),
   _makeThumbnailAccessory: (self: ThumbMakerPluginType) -> (),
-  _updateThumbnail: (self: ThumbMakerPluginType) -> (),
+  _updateThumbnail: (self: ThumbMakerPluginType, newCFrame: CFrame) -> (),
   _deleteCurrentThumbnail: (self: ThumbMakerPluginType) -> (),
 
   _updateButtonColors: (self: ThumbMakerPluginType) -> (),
