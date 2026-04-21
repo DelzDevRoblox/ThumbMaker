@@ -17,6 +17,8 @@ local UserInputService = game:GetService("UserInputService")
 local Types = require(script.Types)
 local Utils = require(script.Utils)
 
+local PLUGIN_CURRENT_VERSION = "1.1.1"
+
 local ICON_DEFAULT       = "rbxassetid://14034112968"
 local ICON_DEFAULT_DON_E = "rbxassetid://107083275815819"
 local ICON_AI_1          = "rbxassetid://108403669183553"
@@ -57,7 +59,8 @@ ThumbMakerPlugin.__index = ThumbMakerPlugin
 
 function ThumbMakerPlugin.new(gui: ScreenGui): ThumbMakerPluginType
   local instance = setmetatable({} :: ThumbMakerPluginType, ThumbMakerPlugin)
-  instance._version = "ver. 1.1.0"
+  instance._version = PLUGIN_CURRENT_VERSION
+  instance._versionString = string.format("ver. %s", PLUGIN_CURRENT_VERSION)
   instance._pluginInitialized = false
 
   instance._selected = {
@@ -161,7 +164,7 @@ function ThumbMakerPlugin:_initGui()
   local camera = Utils:GetCamera()
   script.Parent:FindFirstChild("Grid"):Clone().Parent = self._gui.Viewports.MainViewport
 
-  self._gui.Credits.Version.Text = self._version
+  self._gui.Credits.Version.Text = self._versionString
 
   SelectionService.SelectionChanged:Connect(function() self:_onSelectionChanges() end)
 

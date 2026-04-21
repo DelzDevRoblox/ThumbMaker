@@ -3,6 +3,7 @@
 export type ThumbMakerPluginType = {
   -- core
   _version: string,
+  _versionString: string,
   _pluginInitialized: boolean,
 
   -- selection
