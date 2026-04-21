@@ -3,6 +3,7 @@
 export type ThumbMakerPluginType = {
   -- core
   _version: string,
+  _versionString: string,
   _pluginInitialized: boolean,
 
   -- selection
@@ -83,9 +84,8 @@ export type ThumbMakerPluginType = {
   _onCameraModeChanges: (self: ThumbMakerPluginType) -> (),
 
   _autoFrameModel: (self: ThumbMakerPluginType) -> (),
-  --_handleNudgeInput: (self: ThumbMakerPluginType, input: InputObject) -> (),
   _initScaledPan: (self: ThumbMakerPluginType) -> (),
-  
+
   _saveCameraState: (self: ThumbMakerPluginType, target: Camera | Configuration) -> (),
   _loadCameraState: (self: ThumbMakerPluginType, target: Camera | Configuration) -> (),
 
@@ -106,7 +106,7 @@ export type ThumbMakerPluginType = {
 
   _makeThumbnail: (self: ThumbMakerPluginType) -> (),
   _makeThumbnailAccessory: (self: ThumbMakerPluginType) -> (),
-  _updateThumbnail: (self: ThumbMakerPluginType) -> (),
+  _updateThumbnail: (self: ThumbMakerPluginType, newCFrame: CFrame) -> (),
   _deleteCurrentThumbnail: (self: ThumbMakerPluginType) -> (),
 
   _updateButtonColors: (self: ThumbMakerPluginType) -> (),
@@ -115,6 +115,7 @@ export type ThumbMakerPluginType = {
 
   _resetCameraOffset: (self: ThumbMakerPluginType) -> (),
   _resetCameraOffsetAccessory: (self: ThumbMakerPluginType) -> (),
+  _loadCameraStateFallback: (self: ThumbMakerPluginType, instance: Instance, target: Camera) -> (),
 
   _moveCameraTo: (self: ThumbMakerPluginType, cframe: CFrame) -> (),
 
