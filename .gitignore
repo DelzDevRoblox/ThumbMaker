@@ -8,3 +8,5 @@ sourcemap.json
 *.rbxl
 *.rbxlx
 *.rbxm
+*_.rbxmx
+*.lock
