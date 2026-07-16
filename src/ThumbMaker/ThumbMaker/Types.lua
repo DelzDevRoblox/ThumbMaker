@@ -33,12 +33,12 @@ export type ThumbMakerPluginType = {
       WarningRevertThread: thread?,
     },
     Credits : {
-      Version: TextLabel
+      Version: TextLabel,
     },
     FavoriteStarButton : {
       Button: ImageButton,
       CloseButton: TextButton,
-      InfoBox: Frame
+      InfoBox: Frame,
     },
     ChangelogButton : {
       Button: ImageButton,
@@ -65,13 +65,19 @@ export type ThumbMakerPluginType = {
       Make: TextButton,
       ResetOffset: ImageButton,
       CameraMode: TextButton,
-      AutoFrame: ImageButton
+      AutoFrame: ImageButton,
     },
     Viewports : {
       MainViewport: ViewportFrame,
       PreviewLightMode: ViewportFrame,
       PreviewDarkMode: ViewportFrame,
     },
+    Presets : {
+      InputName: TextBox,
+      SavePreset: TextButton,
+      Container: ScrollingFrame,
+      Template: Frame,
+    }
   },
 
   -- private methods

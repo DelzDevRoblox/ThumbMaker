@@ -145,6 +145,13 @@ function ThumbMakerPlugin.new(gui: ScreenGui): ThumbMakerPluginType
       MainViewport = Get(Get(frame, "Main-Viewport"), "ViewportFrame") :: ViewportFrame,
       PreviewLightMode = Get(Get(frame, "Preview-Viewport-Light"), "ViewportFrame") :: ViewportFrame,
       PreviewDarkMode = Get(Get(frame, "Preview-Viewport-Dark"), "ViewportFrame") :: ViewportFrame,
+    },
+
+    Presets = {
+      SavePreset = Get(Get(frame, "Presets-Group"), "SavePreset") :: TextButton,
+      InputName = Get(Get(frame, "Presets-Group"), "InputName") :: TextBox,
+      Container = Get(Get(frame, "Presets-Group"), "Container") :: ScrollingFrame,
+      Template = Get(Get(Get(frame, "Presets-Group"), "Container"), "Template") :: Frame,
     }
   }
 
@@ -427,7 +434,7 @@ function ThumbMakerPlugin:_initScaledPan()
     camera.CameraType = Enum.CameraType.Fixed
   end)
 
-  UserInputService.InputChanged:Connect(function(input)
+  UserInputService.InputChanged:Connect(function(input: InputObject)
     if not rmbHeld then return end
     if input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
 
@@ -868,23 +875,22 @@ function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
   end
   local isOrtho = target:GetAttribute(ATTR_IS_ORTHO)
   if isOrtho == nil then return end
-  local camera = Utils:GetCamera()
   local pivot: CFrame = self:_findPivot(instance)
   -- Reconstruct local CFrame from saved axes
   local localPos = Vector3.new(
-    target:GetAttribute(ATTR_DIR_X),
-    target:GetAttribute(ATTR_DIR_Y),
-    target:GetAttribute(ATTR_DIR_Z)
+    target:GetAttribute(ATTR_DIR_X) :: number,
+    target:GetAttribute(ATTR_DIR_Y) :: number,
+    target:GetAttribute(ATTR_DIR_Z) :: number
   )
   local localLook = Vector3.new(
-    target:GetAttribute(ATTR_LOOK_X),
-    target:GetAttribute(ATTR_LOOK_Y),
-    target:GetAttribute(ATTR_LOOK_Z)
+    target:GetAttribute(ATTR_LOOK_X) :: number,
+    target:GetAttribute(ATTR_LOOK_Y) :: number,
+    target:GetAttribute(ATTR_LOOK_Z) :: number
   )
   local localUp = Vector3.new(
-    target:GetAttribute(ATTR_UP_X),
-    target:GetAttribute(ATTR_UP_Y),
-    target:GetAttribute(ATTR_UP_Z)
+    target:GetAttribute(ATTR_UP_X) :: number,
+    target:GetAttribute(ATTR_UP_Y) :: number,
+    target:GetAttribute(ATTR_UP_Z) :: number
   )
   -- Reconstruct exact local CFrame then convert back to world space
   local right: Vector3 = localLook:Cross(localUp).Unit
@@ -893,18 +899,20 @@ function ThumbMakerPlugin:_loadCameraState(target: Camera | Configuration)
   local worldCFrame: CFrame = pivot:ToWorldSpace(localCFrame)
   self:_moveCameraTo(worldCFrame)
   if isOrtho then
-    local savedOrthoDist = target:GetAttribute(ATTR_ORTHO_DIST)
+    local savedOrthoDist = target:GetAttribute(ATTR_ORTHO_DIST) :: number?
     if savedOrthoDist then
       self._gui.Props.OrthoDistance = savedOrthoDist
     end
-    self._gui.Props.PerspectiveFOV = target:GetAttribute(ATTR_PERSP_FOV) or FOV_DEFAULT
-    self:_forceOrtho(target:GetAttribute(ATTR_FOV))
+    self._gui.Props.PerspectiveFOV = target:GetAttribute(ATTR_PERSP_FOV) :: number? or FOV_DEFAULT
+    self:_forceOrtho(target:GetAttribute(ATTR_FOV) :: number?)
   else
-    local savedFOV = target:GetAttribute(ATTR_FOV)
-    self._gui.Props.PerspectiveFOV = savedFOV
-    self._gui.Props.OrthoDistance  = (worldCFrame.Position - pivot.Position).Magnitude
-    self:_forcePerspective(savedFOV)
-    self:_FOVSliderSetEnabled(true)
+    local savedFOV = target:GetAttribute(ATTR_FOV) :: number?
+    if savedFOV then
+      self._gui.Props.PerspectiveFOV = savedFOV
+      self._gui.Props.OrthoDistance  = (worldCFrame.Position - pivot.Position).Magnitude
+      self:_forcePerspective(savedFOV)
+      self:_FOVSliderSetEnabled(true)
+    end
   end
 end
 
@@ -916,7 +924,7 @@ function ThumbMakerPlugin:_loadCameraStateFallback(instance: Instance, target: C
   local camera = Utils:GetCamera()
   local currentSelected: Instance? = self._selected.instance
   if not currentSelected then return end
-  local offset: CFrame = target:GetAttribute("ThumbnailCameraOffset")
+  local offset: CFrame = target:GetAttribute("ThumbnailCameraOffset") :: CFrame
   if offset then
     -- load offset that was set as attribute
     self:_moveCameraTo(self:_findPivot(currentSelected) * offset)
